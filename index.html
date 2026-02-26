@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -9,18 +9,15 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Meu Controle">
+    <meta name="apple-mobile-web-app-title" content="Controle">
     <meta name="theme-color" content="#292524">
-    <!-- Manifest Inline para Android reconhecer como App -->
-    <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Meu%20Controle%22%2C%22short_name%22%3A%22Controle%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23fdf8f5%22%2C%22theme_color%22%3A%22%23292524%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23fb7185%22%2F%3E%3Ctext%20y%3D%2255%22%20x%3D%2250%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20font-size%3D%2250%22%3E%E2%9A%A1%3C%2Ftext%3E%3C%2Fsvg%3E%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
+    <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Meu%20Controle%22%2C%22short_name%22%3A%22Controle%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23292524%22%2C%22theme_color%22%3A%22%23292524%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23fb7185%22%2F%3E%3Ctext%20y%3D%2255%22%20x%3D%2250%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20font-size%3D%2250%22%3E%E2%9A%A1%3C%2Ftext%3E%3C%2Fsvg%3E%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
     <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23fb7185%22/><text y=%2255%22 x=%2250%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2250%22>⚡</text></svg>">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <!-- FontAwesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -49,28 +46,27 @@
     </script>
 
     <style>
-        body { overscroll-behavior-y: none; -webkit-tap-highlight-color: transparent; }
-        input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-        ::-webkit-scrollbar { width: 8px; }
+        html, body { height: 100dvh; width: 100vw; overflow: hidden; overscroll-behavior-y: none; -webkit-tap-highlight-color: transparent; }
+        input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #fef3c7; border-left: 2px solid #292524; }
         ::-webkit-scrollbar-thumb { background: #fb923c; border: 2px solid #292524; border-radius: 0px; }
-        ::-webkit-scrollbar-thumb:hover { background: #f97316; }
         
         .retro-shadow { box-shadow: 4px 4px 0px #292524; }
         .retro-shadow-lg { box-shadow: 8px 8px 0px #292524; }
         .retro-border { border: 3px solid #292524; }
-        
-        .retro-btn:active {
-            transform: translate(4px, 4px);
-            box-shadow: 0px 0px 0px #292524;
-        }
+        .retro-btn:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px #292524; }
         
         .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
         [v-cloak] { display: none; }
+
+        .splash-out { animation: splashOut 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes splashOut {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(1.1); pointer-events: none; visibility: hidden; }
+        }
     </style>
 
-    <!-- Import Map para Vue e Firebase -->
     <script type="importmap">
         {
             "imports": {
@@ -82,59 +78,68 @@
         }
     </script>
 </head>
-<body class="bg-[#fdf8f5] font-sans text-retro-dark h-screen overflow-hidden selection:bg-retro-yellow selection:text-retro-dark">
+<body class="bg-[#292524] md:bg-[#fdf8f5] font-sans text-retro-dark selection:bg-retro-yellow selection:text-retro-dark">
 
-    <div id="app" class="h-full w-full flex items-center justify-center p-0 md:p-6" v-cloak>
+    <div id="app" class="h-[100dvh] w-full flex items-center justify-center p-0 md:p-6" v-cloak>
         
+        <!-- ================= CAPA / SPLASH SCREEN ================= -->
+        <div v-if="showSplash" class="fixed inset-0 z-[999] bg-retro-yellow flex flex-col items-center justify-center" :class="{ 'splash-out': hideSplashAnimation }">
+            <div class="absolute top-10 right-10 w-24 h-24 bg-retro-teal rounded-full retro-border retro-shadow opacity-80"></div>
+            <div class="absolute bottom-20 left-10 w-32 h-32 bg-retro-pink rounded-lg retro-border retro-shadow transform rotate-12 opacity-80"></div>
+            
+            <div class="bg-retro-dark p-6 rounded-3xl retro-border retro-shadow-lg transform -rotate-6 mb-6 z-10 relative">
+                <i class="fa-solid fa-bolt text-7xl text-retro-cream"></i>
+            </div>
+            <h1 class="text-5xl font-black text-retro-dark tracking-tighter uppercase z-10 mt-2">Meu</h1>
+            <h1 class="text-6xl font-black text-retro-pink tracking-tighter uppercase z-10" style="text-shadow: 4px 4px 0px #292524;">Controle</h1>
+            <p class="text-xs font-black uppercase tracking-widest mt-6 bg-white border-2 border-retro-dark px-4 py-2 shadow-[4px_4px_0px_#292524] z-10 rounded-full">
+                <i class="fa-solid fa-spinner fa-spin mr-2"></i> Carregando
+            </p>
+        </div>
+
         <!-- ================= TELA DE LOGIN ================= -->
-        <div v-if="!user && !authLoading" class="w-full max-w-md p-8 bg-retro-cream retro-border md:rounded-2xl retro-shadow-lg h-full md:h-auto flex flex-col justify-center animate-fade-in relative overflow-hidden z-10">
-            <div class="absolute -top-10 -right-10 w-32 h-32 bg-retro-yellow rounded-full retro-border retro-shadow opacity-50"></div>
+        <div v-show="!user && !authLoading && !showSplash" class="w-full h-full md:h-auto max-w-md p-6 md:p-8 bg-retro-cream md:retro-border md:rounded-2xl md:retro-shadow-lg flex flex-col justify-center animate-fade-in relative overflow-hidden z-10">
+            <div class="md:hidden absolute inset-0 opacity-[0.05] pointer-events-none" style="background-image: radial-gradient(#292524 2px, transparent 2px); background-size: 20px 20px;"></div>
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-retro-teal rounded-full retro-border retro-shadow opacity-50"></div>
             <div class="absolute -bottom-8 -left-8 w-24 h-24 bg-retro-blue retro-border retro-shadow transform rotate-12 opacity-50"></div>
 
-            <div class="text-center mb-10 relative z-10">
-                <div class="bg-retro-pink w-16 h-16 rounded-xl flex items-center justify-center mx-auto mb-5 retro-border retro-shadow transform -rotate-3">
-                    <i class="fa-solid fa-bolt text-2xl text-retro-dark transform rotate-3"></i>
+            <div class="text-center mb-10 relative z-10 mt-safe">
+                <div class="bg-retro-pink w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 retro-border retro-shadow transform -rotate-3">
+                    <i class="fa-solid fa-wallet text-4xl text-retro-dark transform rotate-3"></i>
                 </div>
-                <h1 class="text-4xl font-black text-retro-dark tracking-tighter uppercase">O Meu Controlo</h1>
-                <p class="text-retro-dark font-black text-xs mt-2 uppercase tracking-widest bg-retro-teal inline-block px-3 py-1 retro-border retro-shadow">
-                    <i class="fa-solid fa-key text-xs mr-1"></i> Acesso Seguro
+                <h1 class="text-4xl font-black text-retro-dark tracking-tighter uppercase leading-none">Acesso<br>Seguro</h1>
+                <p class="text-retro-dark font-black text-xs mt-3 uppercase tracking-widest bg-retro-yellow inline-block px-3 py-1 retro-border shadow-[2px_2px_0px_#292524]">
+                    <i class="fa-solid fa-lock text-xs mr-1"></i> Identifique-se
                 </p>
             </div>
 
-            <div v-if="authError" class="bg-red-400 text-retro-dark p-3 rounded-xl text-sm font-black text-center retro-border retro-shadow mb-6 flex items-center justify-center">
-                <i class="fa-solid fa-circle-exclamation mr-2"></i> {{ authError }}
+            <div v-if="authError" class="bg-red-400 text-white p-3 rounded-xl text-xs font-black text-center retro-border shadow-[2px_2px_0px_#292524] mb-6 flex flex-col items-center justify-center relative z-10 mx-2">
+                <i class="fa-solid fa-circle-exclamation text-lg mb-1"></i> 
+                {{ authError }}
             </div>
 
-            <form @submit.prevent="handleAuth" class="space-y-5 relative z-10">
+            <form @submit.prevent="handleAuth" class="space-y-5 relative z-10 w-full max-w-[320px] mx-auto">
                 <div>
-                    <label class="block text-sm font-black text-retro-dark mb-2 uppercase tracking-wider">E-mail</label>
-                    <input v-model="email" type="email" required class="w-full bg-white retro-border rounded-xl p-3.5 text-sm font-bold outline-none focus:bg-retro-cream transition-colors text-retro-dark retro-shadow">
+                    <label class="block text-xs font-black text-retro-dark mb-1.5 uppercase tracking-wider pl-1">E-mail</label>
+                    <input v-model="email" type="email" required class="w-full bg-white retro-border rounded-xl p-4 text-sm font-bold outline-none focus:bg-retro-yellow/20 transition-colors text-retro-dark shadow-[inset_2px_2px_0px_rgba(0,0,0,0.05)]">
                 </div>
                 <div>
-                    <label class="block text-sm font-black text-retro-dark mb-2 uppercase tracking-wider">Palavra-passe</label>
-                    <input v-model="password" type="password" required minlength="6" class="w-full bg-white retro-border rounded-xl p-3.5 text-sm font-bold outline-none focus:bg-retro-cream transition-colors text-retro-dark retro-shadow">
+                    <label class="block text-xs font-black text-retro-dark mb-1.5 uppercase tracking-wider pl-1">Senha (Mín. 6)</label>
+                    <input v-model="password" type="password" required minlength="6" class="w-full bg-white retro-border rounded-xl p-4 text-sm font-bold outline-none focus:bg-retro-yellow/20 transition-colors text-retro-dark shadow-[inset_2px_2px_0px_rgba(0,0,0,0.05)]">
                 </div>
-                <button type="submit" :disabled="loading" class="w-full bg-retro-teal text-retro-dark retro-border retro-shadow retro-btn font-black p-4 rounded-xl transition-all text-sm uppercase tracking-widest mt-6 flex justify-center items-center">
+                <button type="submit" :disabled="loading" class="w-full bg-retro-teal text-retro-dark retro-border retro-shadow retro-btn font-black p-4 rounded-xl transition-all text-sm uppercase tracking-widest mt-8 flex justify-center items-center">
                     <i v-if="loading" class="fa-solid fa-spinner fa-spin mr-2"></i>
-                    {{ isLogin ? 'Entrar' : 'Criar Conta' }}
+                    {{ isLogin ? 'Entrar no App' : 'Criar Conta' }}
                 </button>
             </form>
 
-            <button @click="toggleAuthMode" class="mt-8 text-sm font-black text-retro-dark hover:text-retro-orange transition-colors text-center w-full z-10 relative underline decoration-2 underline-offset-4">
-                {{ isLogin ? 'Não tens conta? Regista-te' : 'Já tens conta? Iniciar sessão' }}
+            <button type="button" @click="toggleAuthMode" class="mt-8 text-xs font-black text-retro-dark hover:text-retro-orange transition-colors text-center w-full z-10 relative uppercase tracking-widest decoration-2 underline-offset-4 bg-white/50 py-2 rounded-lg">
+                {{ isLogin ? 'Novo por aqui? Criar conta' : 'Já tem conta? Entrar' }}
             </button>
         </div>
 
-        <!-- ================= ECRÃ DE CARREGAMENTO ================= -->
-        <div v-else-if="authLoading" class="flex flex-col items-center justify-center space-y-4 w-full h-full">
-            <div class="w-16 h-16 bg-retro-yellow retro-border retro-shadow rounded-full flex items-center justify-center animate-spin">
-                <i class="fa-solid fa-star text-retro-dark text-2xl"></i>
-            </div>
-            <p class="font-black text-retro-dark tracking-widest uppercase text-sm bg-white px-4 py-1 retro-border retro-shadow">A carregar...</p>
-        </div>
-
         <!-- ================= APLICAÇÃO PRINCIPAL ================= -->
-        <div v-else class="flex flex-col md:flex-row h-full w-full max-w-6xl bg-white md:rounded-3xl retro-shadow-lg relative overflow-hidden border-0 md:border-[3px] border-retro-dark">
+        <div v-show="user && !authLoading && !showSplash" class="flex flex-col md:flex-row h-full w-full max-w-6xl bg-white md:rounded-3xl md:retro-shadow-lg relative overflow-hidden border-0 md:border-[3px] border-retro-dark">
             
             <!-- MENU LATERAL (DESKTOP) -->
             <aside class="hidden md:flex flex-col w-72 bg-retro-cream border-r-[3px] border-retro-dark p-6 z-20">
@@ -142,8 +147,8 @@
                     <div class="bg-retro-pink w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-4 retro-border retro-shadow transform rotate-3">
                         <i class="fa-solid fa-bolt text-xl text-retro-dark"></i>
                     </div>
-                    <h1 class="text-2xl font-black text-retro-dark tracking-tighter uppercase">O Meu Controlo</h1>
-                    <p class="text-xs font-bold text-retro-dark mt-2 truncate bg-white border-2 border-retro-dark inline-block px-2 py-0.5 rounded-md shadow-[2px_2px_0px_#292524]">{{ user.email }}</p>
+                    <h1 class="text-2xl font-black text-retro-dark tracking-tighter uppercase">Meu Controle</h1>
+                    <p class="text-xs font-bold text-retro-dark mt-2 truncate bg-white border-2 border-retro-dark inline-block px-2 py-0.5 rounded-md shadow-[2px_2px_0px_#292524]">{{ user?.email }}</p>
                 </div>
 
                 <nav class="flex-1 space-y-3">
@@ -152,6 +157,9 @@
                     </button>
                     <button @click="activeTab = 'fixos'" :class="activeTab === 'fixos' ? 'bg-retro-yellow retro-shadow' : 'bg-white hover:bg-gray-50 shadow-[2px_2px_0px_#292524]'" class="w-full flex items-center p-3.5 rounded-xl font-black transition-all text-sm border-2 border-retro-dark text-retro-dark">
                         <i class="fa-solid fa-money-bill-transfer text-lg mr-3 w-6 text-center"></i> Contas & Faturas
+                    </button>
+                    <button @click="activeTab = 'cofrinho'" :class="activeTab === 'cofrinho' ? 'bg-retro-blue retro-shadow' : 'bg-white hover:bg-gray-50 shadow-[2px_2px_0px_#292524]'" class="w-full flex items-center p-3.5 rounded-xl font-black transition-all text-sm border-2 border-retro-dark text-retro-dark">
+                        <i class="fa-solid fa-piggy-bank text-lg mr-3 w-6 text-center"></i> Cofrinho
                     </button>
                     <button @click="activeTab = 'diario'" :class="activeTab === 'diario' ? 'bg-retro-pink retro-shadow' : 'bg-white hover:bg-gray-50 shadow-[2px_2px_0px_#292524]'" class="w-full flex items-center p-3.5 rounded-xl font-black transition-all text-sm border-2 border-retro-dark text-retro-dark">
                         <i class="fa-solid fa-cart-shopping text-lg mr-3 w-6 text-center"></i> Lançamentos
@@ -169,292 +177,445 @@
             </aside>
 
             <!-- ÁREA DE CONTEÚDO PRINCIPAL -->
-            <main class="flex-1 flex flex-col h-full bg-[#fdf8f5] relative">
-                <!-- Padrão de fundo -->
+            <main class="flex-1 flex flex-col h-[100dvh] md:h-full bg-[#fdf8f5] relative">
                 <div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#292524 2px, transparent 2px); background-size: 20px 20px;"></div>
                 
-                <!-- CABEÇALHO COM SALDO -->
-                <header class="bg-retro-dark text-retro-cream p-6 pt-8 shadow-md z-10 shrink-0 mb-0 pb-8 relative border-b-[3px] border-retro-dark">
-                    <button @click="logout" class="md:hidden absolute top-5 right-5 text-retro-cream hover:text-white p-2">
-                        <i class="fa-solid fa-arrow-right-from-bracket text-lg"></i>
+                <!-- CABEÇALHO DUPLO (DINHEIRO VS CARTÃO) -->
+                <header class="bg-retro-dark text-retro-cream px-5 pt-8 pb-6 shadow-md z-10 shrink-0 mb-0 relative border-b-[3px] border-retro-dark">
+                    <button @click="logout" class="md:hidden absolute top-8 right-5 text-retro-cream bg-white/10 rounded-full w-10 h-10 flex items-center justify-center active:scale-95 transition-transform">
+                        <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
                     </button>
                     
-                    <h2 class="text-xl font-black tracking-tighter uppercase md:hidden mb-6 flex items-center">
+                    <h2 class="text-xl font-black tracking-tighter uppercase md:hidden mb-4 flex items-center">
                         <div class="w-8 h-8 bg-retro-pink rounded-lg flex items-center justify-center mr-3 border-2 border-retro-cream">
                             <i class="fa-solid fa-bolt text-sm text-retro-dark"></i>
                         </div>
-                        O Meu Controlo
+                        Meu Controle
                     </h2>
                     
-                    <div class="max-w-4xl mx-auto relative z-10">
-                        <p class="text-retro-yellow text-xs font-black uppercase tracking-widest mb-1">Saldo Disponível</p>
-                        <h2 class="text-4xl md:text-5xl font-black tracking-tighter mb-4">{{ formatCurrency(balance) }}</h2>
-                        <div class="flex gap-4">
-                            <div class="bg-retro-teal text-retro-dark px-3 py-1.5 rounded-lg border-2 border-retro-dark retro-shadow flex items-center text-xs font-black uppercase tracking-wider">
-                                <i class="fa-solid fa-arrow-up mr-2"></i>
-                                <span>{{ formatCurrency(totalIncome) }}</span>
+                    <div class="max-w-4xl mx-auto relative z-10 flex flex-col gap-3">
+                        <!-- Saldo Dinheiro -->
+                        <div class="bg-retro-teal p-4 rounded-xl border-[3px] border-retro-dark shadow-[4px_4px_0px_#fef3c7] relative overflow-hidden flex justify-between items-center">
+                            <div class="z-10">
+                                <p class="text-[#292524] text-[10px] font-black uppercase tracking-widest mb-1">Saldo em Dinheiro</p>
+                                <h2 class="text-3xl md:text-4xl font-black tracking-tighter text-[#292524] leading-none">{{ formatCurrency(balance) }}</h2>
                             </div>
-                            <div class="bg-retro-pink text-retro-dark px-3 py-1.5 rounded-lg border-2 border-retro-dark retro-shadow flex items-center text-xs font-black uppercase tracking-wider">
-                                <i class="fa-solid fa-arrow-down mr-2"></i>
-                                <span>{{ formatCurrency(totalFixed) }}</span>
+                            <i class="fa-solid fa-wallet text-5xl text-[#292524] opacity-20 transform -rotate-12 absolute right-4"></i>
+                        </div>
+                        
+                        <!-- Limite Cartão -->
+                        <div class="bg-retro-pink p-4 rounded-xl border-[3px] border-retro-dark shadow-[4px_4px_0px_#fef3c7] relative overflow-hidden flex justify-between items-center">
+                            <div class="z-10 w-full">
+                                <div class="flex justify-between items-start w-full">
+                                    <p class="text-[#292524] text-[10px] font-black uppercase tracking-widest mb-1">Limite do Cartão</p>
+                                    <button @click="editCreditLimit" class="text-[9px] bg-retro-dark text-retro-cream px-2 py-1 rounded font-black uppercase active:scale-95 transition-transform retro-border shadow-[1px_1px_0px_#fef3c7]">Editar</button>
+                                </div>
+                                <h2 class="text-2xl md:text-3xl font-black tracking-tighter text-[#292524] leading-none">{{ formatCurrency(availableCredit) }}</h2>
+                                <div class="bg-white/40 border border-retro-dark/20 rounded px-2 py-1 mt-2 inline-block">
+                                    <p class="text-[#292524] text-[9px] font-black uppercase">Fatura Atual: <span class="text-white bg-retro-dark px-1 rounded">{{ formatCurrency(creditPurchasesThisMonth) }}</span></p>
+                                </div>
                             </div>
+                            <i class="fa-regular fa-credit-card absolute right-4 text-6xl text-[#292524] opacity-20 transform rotate-12"></i>
                         </div>
                     </div>
                 </header>
 
-                <!-- CONTEÚDO COM SCROLL -->
-                <div class="flex-1 overflow-y-auto p-4 md:p-8 pb-28 md:pb-8 relative z-10">
+                <div class="flex-1 overflow-y-auto p-4 md:p-8 pb-32 relative z-10 w-full custom-scrollbar">
                     <div class="max-w-4xl mx-auto">
                         
                         <!-- ================= ABA: VISÃO GERAL ================= -->
                         <div v-if="activeTab === 'resumo'" class="space-y-6 animate-fade-in">
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="bg-retro-teal p-5 rounded-2xl retro-border retro-shadow flex flex-col justify-center">
-                                    <p class="text-[10px] text-retro-dark mb-1 font-black uppercase tracking-widest"><i class="fa-solid fa-circle-check mr-1"></i> Recebido</p>
-                                    <p class="font-black text-retro-dark text-xl md:text-2xl">{{ formatCurrency(receivedIncome) }}</p>
+                            <div class="grid grid-cols-3 gap-2">
+                                <div class="bg-white p-3 rounded-xl retro-border retro-shadow flex flex-col justify-center text-center">
+                                    <p class="text-[8px] md:text-[10px] font-black uppercase tracking-widest">Entradas</p>
+                                    <p class="font-black text-emerald-600 text-sm md:text-lg">{{ formatCurrency(totalIncome) }}</p>
                                 </div>
-                                <div class="bg-retro-pink p-5 rounded-2xl retro-border retro-shadow flex flex-col justify-center">
-                                    <p class="text-[10px] text-retro-dark mb-1 font-black uppercase tracking-widest"><i class="fa-solid fa-circle-check mr-1"></i> Pago</p>
-                                    <p class="font-black text-retro-dark text-xl md:text-2xl">{{ formatCurrency(paidFixed) }}</p>
+                                <div class="bg-white p-3 rounded-xl retro-border retro-shadow flex flex-col justify-center text-center">
+                                    <p class="text-[8px] md:text-[10px] font-black uppercase tracking-widest">Contas Fixas</p>
+                                    <p class="font-black text-rose-600 text-sm md:text-lg">{{ formatCurrency(totalFixed) }}</p>
+                                </div>
+                                <div class="bg-white p-3 rounded-xl retro-border retro-shadow flex flex-col justify-center text-center">
+                                    <p class="text-[8px] md:text-[10px] font-black uppercase tracking-widest">No Cofrinho</p>
+                                    <p class="font-black text-retro-blue text-sm md:text-lg">{{ formatCurrency(totalSaved) }}</p>
                                 </div>
                             </div>
 
-                            <div class="bg-white rounded-2xl retro-border retro-shadow p-6 space-y-6 mt-6">
-                                <div class="border-b-[3px] border-retro-dark pb-4">
-                                    <h4 class="font-black text-sm text-retro-dark uppercase tracking-widest"><i class="fa-solid fa-bullseye mr-2 text-retro-blue"></i> Orçamentos Variáveis</h4>
+                            <div class="bg-white rounded-2xl retro-border retro-shadow p-5 md:p-6 space-y-5 mt-6">
+                                <div class="flex justify-between items-end border-b-[3px] border-retro-dark pb-3">
+                                    <div>
+                                        <h4 class="font-black text-sm text-retro-dark uppercase tracking-widest"><i class="fa-solid fa-bullseye mr-2 text-retro-blue"></i> Orçamentos</h4>
+                                        <p class="text-[9px] font-bold text-gray-500 uppercase mt-1">Disponível para orçar: {{ formatCurrency(availableForBudgets) }}</p>
+                                        <p class="text-[9px] font-black uppercase mt-0.5" :class="totalBudgetLimit > availableForBudgets ? 'text-red-500' : 'text-emerald-500'">Total Orçado: {{ formatCurrency(totalBudgetLimit) }}</p>
+                                    </div>
+                                    <button @click="isEditingBudgets = !isEditingBudgets" class="bg-retro-yellow retro-border text-retro-dark shadow-[2px_2px_0px_#292524] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all px-3 py-1.5 rounded-lg font-black text-[10px] flex items-center uppercase tracking-wider shrink-0">
+                                        <i :class="isEditingBudgets ? 'fa-solid fa-check mr-1.5' : 'fa-solid fa-pen-to-square mr-1.5'"></i>
+                                        {{ isEditingBudgets ? 'Ok' : 'Editar' }}
+                                    </button>
                                 </div>
                                 
-                                <div v-for="budget in budgets" :key="budget.id" class="space-y-3">
-                                    <div class="flex justify-between items-end">
-                                        <div class="flex items-center">
-                                            <div class="w-10 h-10 rounded-xl flex items-center justify-center mr-3 retro-border shadow-[2px_2px_0px_#292524] bg-white text-retro-dark">
-                                                <i :class="budget.icon + ' text-base'"></i>
+                                <div v-for="budget in budgets" :key="budget.id" class="space-y-2">
+                                    <template v-if="!isEditingBudgets">
+                                        <div class="flex justify-between items-end">
+                                            <div class="flex items-center">
+                                                <div class="w-8 h-8 rounded-lg flex items-center justify-center mr-3 retro-border shadow-[2px_2px_0px_#292524] bg-white text-retro-dark">
+                                                    <i :class="budget.icon + ' text-sm'"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm font-black text-retro-dark">{{ budget.name }}</p>
+                                                    <p class="text-[9px] font-black text-gray-500 uppercase tracking-wider">Restam {{ formatCurrency(budget.limit - getBudgetSpent(budget.id)) }}</p>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <p class="text-base font-black text-retro-dark">{{ budget.name }}</p>
-                                                <p class="text-[10px] font-black text-gray-500 uppercase tracking-wider">Restam {{ formatCurrency(budget.limit - getBudgetSpent(budget.id)) }}</p>
+                                            <div class="text-right">
+                                                <span class="font-black text-retro-dark text-sm">{{ formatCurrency(getBudgetSpent(budget.id)) }}</span>
+                                                <span class="text-gray-500 text-[10px] font-bold ml-1">/ {{ formatCurrency(budget.limit) }}</span>
                                             </div>
                                         </div>
-                                        <div class="text-right">
-                                            <span class="font-black text-retro-dark">{{ formatCurrency(getBudgetSpent(budget.id)) }}</span>
-                                            <span class="text-gray-500 text-xs font-bold ml-1">/ {{ formatCurrency(budget.limit) }}</span>
+                                        <div class="w-full bg-retro-cream retro-border rounded-full h-3.5 overflow-hidden shadow-[inset_2px_2px_0px_rgba(0,0,0,0.1)]">
+                                            <div class="h-full border-r-[3px] border-retro-dark transition-all duration-1000 relative"
+                                                 :class="getBudgetPercentage(budget.id) > 85 ? 'bg-red-500' : budget.color"
+                                                 :style="{ width: Math.min(getBudgetPercentage(budget.id), 100) + '%' }">
+                                                 <div class="absolute inset-0 opacity-20" style="background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, #000 10px, #000 20px);"></div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="w-full bg-retro-cream retro-border rounded-full h-4 overflow-hidden shadow-[inset_2px_2px_0px_rgba(0,0,0,0.1)]">
-                                        <div class="h-full border-r-[3px] border-retro-dark transition-all duration-1000 relative"
-                                             :class="getBudgetPercentage(budget.id) > 85 ? 'bg-red-500' : budget.color"
-                                             :style="{ width: Math.min(getBudgetPercentage(budget.id), 100) + '%' }">
-                                             <div class="absolute inset-0 opacity-20" style="background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, #000 10px, #000 20px);"></div>
+                                    </template>
+                                    <template v-else>
+                                        <div class="flex flex-1 items-center gap-2 w-full mb-3 bg-retro-cream/50 p-2 rounded-xl border-2 border-retro-dark/10">
+                                            <button @click="removeItem('budgets', budget.id)" class="bg-retro-pink retro-border shadow-[2px_2px_0px_#292524] retro-btn text-retro-dark w-8 h-8 rounded-lg flex items-center justify-center shrink-0"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                                            <div class="flex-1 flex flex-col sm:flex-row gap-2">
+                                                <input v-model="budget.name" type="text" class="w-full bg-white retro-border rounded-lg p-2 text-xs font-black text-retro-dark outline-none">
+                                                <input v-model.number="budget.limit" type="number" class="w-full sm:w-28 bg-white retro-border rounded-lg p-2 text-xs font-black text-retro-dark outline-none">
+                                            </div>
                                         </div>
-                                    </div>
+                                    </template>
+                                </div>
+
+                                <div v-if="isEditingBudgets" class="bg-retro-teal retro-border retro-shadow rounded-xl p-3.5 mt-4">
+                                    <p class="text-[10px] font-black text-retro-dark uppercase tracking-widest mb-2"><i class="fa-solid fa-plus mr-1"></i> Novo Orçamento</p>
+                                    <form @submit.prevent="addItem('budgets')" class="flex flex-col sm:flex-row gap-2">
+                                        <input v-model="newBudget.name" type="text" placeholder="CATEGORIA (EX: UBER)" required class="flex-1 bg-white retro-border rounded-lg p-2 text-xs font-black outline-none focus:bg-retro-cream">
+                                        <div class="flex gap-2 w-full sm:w-auto">
+                                            <input v-model.number="newBudget.limit" type="number" step="0.01" placeholder="LIMITE R$" required class="flex-1 sm:w-28 bg-white retro-border rounded-lg p-2 text-xs font-black outline-none focus:bg-retro-cream">
+                                            <button type="submit" class="bg-retro-yellow retro-border shadow-[2px_2px_0px_#292524] retro-btn text-retro-dark p-2 rounded-lg px-3 font-black shrink-0"><i class="fa-solid fa-check"></i></button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
 
                         <!-- ================= ABA: CONTAS E FATURAS ================= -->
-                        <div v-if="activeTab === 'fixos'" class="space-y-8 animate-fade-in">
+                        <div v-if="activeTab === 'fixos'" class="space-y-8 animate-fade-in w-full">
                             
-                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                                <h3 class="text-xl font-black text-retro-dark uppercase tracking-tighter"><i class="fa-solid fa-money-bill-transfer mr-2 text-retro-orange"></i> Gestão de Contas</h3>
-                                <button @click="isEditing = !isEditing" class="bg-retro-yellow retro-border text-retro-dark retro-shadow retro-btn px-4 py-2 rounded-xl font-black text-sm transition-all flex items-center uppercase tracking-wider">
-                                    <i :class="isEditing ? 'fa-solid fa-check mr-2' : 'fa-solid fa-pen-to-square mr-2'"></i>
-                                    {{ isEditing ? 'Concluir' : 'Editar' }}
+                            <div class="flex justify-between items-center gap-2">
+                                <h3 class="text-lg md:text-xl font-black text-retro-dark uppercase tracking-tighter truncate"><i class="fa-solid fa-money-bill-transfer mr-2 text-retro-orange"></i> Contas Fixas</h3>
+                                <button @click="isEditing = !isEditing" class="bg-retro-yellow retro-border text-retro-dark shadow-[2px_2px_0px_#292524] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all px-3 py-1.5 rounded-lg font-black text-[10px] flex items-center uppercase tracking-wider shrink-0">
+                                    <i :class="isEditing ? 'fa-solid fa-check mr-1.5' : 'fa-solid fa-pen-to-square mr-1.5'"></i>
+                                    {{ isEditing ? 'Ok' : 'Editar' }}
                                 </button>
                             </div>
 
                             <!-- RENDAS -->
                             <section>
-                                <div class="flex items-center justify-between mb-4 px-1 bg-white retro-border p-3 rounded-xl shadow-[4px_4px_0px_#292524]">
-                                    <h4 class="text-sm font-black text-retro-dark uppercase tracking-widest"><i class="fa-solid fa-arrow-down mr-2 text-retro-teal"></i>Entradas</h4>
-                                    <span class="text-[10px] font-black text-retro-dark bg-retro-teal retro-border px-2 py-1 rounded-md shadow-[2px_2px_0px_#292524]">{{ incomes.filter(i => i.received).length }} / {{ incomes.length }} OK</span>
+                                <div class="flex items-center justify-between mb-3 px-1 bg-white retro-border p-2.5 rounded-xl shadow-[2px_2px_0px_#292524]">
+                                    <h4 class="text-xs font-black text-retro-dark uppercase tracking-widest"><i class="fa-solid fa-arrow-down mr-2 text-retro-teal"></i>Entradas Mensais</h4>
+                                    <span class="text-[9px] font-black text-retro-dark bg-retro-teal retro-border px-1.5 py-0.5 rounded shadow-[1px_1px_0px_#292524]">{{ incomes.filter(i => i.received).length }} / {{ incomes.length }} OK</span>
                                 </div>
                                 
                                 <div class="space-y-3">
-                                    <div v-for="income in incomes" :key="income.id" class="bg-white retro-border rounded-2xl p-4 retro-shadow flex items-center justify-between gap-4 relative overflow-hidden">
+                                    <div v-for="income in incomes" :key="income.id" class="bg-white retro-border rounded-xl p-3.5 shadow-[2px_2px_0px_#292524] flex items-center justify-between gap-3 relative overflow-hidden">
                                         <div v-if="income.received && !isEditing" class="absolute left-0 top-0 bottom-0 w-2 bg-retro-teal border-r-[3px] border-retro-dark"></div>
                                         
                                         <template v-if="!isEditing">
-                                            <div class="flex items-center gap-3 pl-2">
-                                                <div>
-                                                    <p class="font-black text-retro-dark text-base uppercase" :class="income.received ? 'line-through decoration-2 decoration-retro-teal opacity-70' : ''">{{ income.name }}</p>
-                                                    <p class="font-black text-retro-dark text-lg" :class="income.received ? 'opacity-70' : ''">{{ formatCurrency(income.amount) }}</p>
+                                            <div class="flex items-center gap-3 pl-1 flex-1 min-w-0">
+                                                <div class="min-w-0">
+                                                    <p class="font-black text-retro-dark text-sm uppercase truncate" :class="income.received ? 'line-through decoration-2 decoration-retro-teal opacity-70' : ''">{{ income.name }}</p>
+                                                    <p class="font-black text-retro-dark text-base" :class="income.received ? 'opacity-70' : ''">{{ formatCurrency(income.amount) }}</p>
                                                 </div>
                                             </div>
-                                            <button @click="toggleStatus(income, 'received')" class="w-12 h-12 rounded-xl retro-border flex items-center justify-center retro-btn transition-colors shrink-0" :class="income.received ? 'bg-retro-teal shadow-[2px_2px_0px_#292524]' : 'bg-gray-100 shadow-[2px_2px_0px_#292524] hover:bg-retro-cream'">
-                                                <i class="fa-solid" :class="income.received ? 'fa-check text-retro-dark' : 'fa-hand-pointer text-gray-400'"></i>
+                                            <button @click="toggleStatus(income, 'received')" class="w-10 h-10 rounded-lg retro-border flex items-center justify-center retro-btn transition-colors shrink-0" :class="income.received ? 'bg-retro-teal shadow-[2px_2px_0px_#292524]' : 'bg-gray-100 shadow-[2px_2px_0px_#292524] hover:bg-retro-cream'">
+                                                <i class="fa-solid text-sm" :class="income.received ? 'fa-check text-retro-dark' : 'fa-hand-pointer text-gray-400'"></i>
                                             </button>
                                         </template>
 
                                         <template v-else>
-                                            <div class="flex flex-1 items-center gap-3 w-full">
-                                                <button @click="removeItem('incomes', income.id)" class="bg-retro-pink retro-border shadow-[2px_2px_0px_#292524] retro-btn text-retro-dark w-10 h-10 rounded-xl flex items-center justify-center shrink-0"><i class="fa-solid fa-trash-can"></i></button>
-                                                <input v-model="income.name" type="text" class="flex-1 bg-retro-cream retro-border rounded-xl p-2.5 text-sm font-black text-retro-dark outline-none focus:bg-white shadow-[inset_2px_2px_0px_rgba(0,0,0,0.1)]">
-                                                <input v-model.number="income.amount" type="number" class="w-24 md:w-32 bg-retro-cream retro-border rounded-xl p-2.5 text-sm font-black text-retro-dark outline-none focus:bg-white shadow-[inset_2px_2px_0px_rgba(0,0,0,0.1)]">
+                                            <div class="flex flex-1 items-center gap-2 w-full">
+                                                <button @click="removeItem('incomes', income.id)" class="bg-retro-pink retro-border shadow-[2px_2px_0px_#292524] retro-btn text-retro-dark w-10 h-10 rounded-lg flex items-center justify-center shrink-0"><i class="fa-solid fa-trash-can text-sm"></i></button>
+                                                <div class="flex-1 flex flex-col sm:flex-row gap-2">
+                                                    <input v-model="income.name" type="text" class="w-full bg-retro-cream retro-border rounded-lg p-2 text-xs font-black text-retro-dark outline-none focus:bg-white">
+                                                    <input v-model.number="income.amount" type="number" class="w-full sm:w-28 bg-retro-cream retro-border rounded-lg p-2 text-xs font-black text-retro-dark outline-none focus:bg-white">
+                                                </div>
                                             </div>
                                         </template>
                                     </div>
                                     
-                                    <div v-if="isEditing" class="bg-retro-teal retro-border retro-shadow rounded-2xl p-4 mt-4">
-                                        <p class="text-xs font-black text-retro-dark uppercase tracking-widest mb-2"><i class="fa-solid fa-plus mr-1"></i> Nova Entrada</p>
-                                        <form @submit.prevent="addItem('incomes')" class="flex flex-col sm:flex-row gap-3">
-                                            <input v-model="newItem.name" type="text" placeholder="Nome" required class="flex-1 bg-white retro-border rounded-xl p-3 text-sm font-black outline-none focus:bg-retro-cream shadow-[inset_2px_2px_0px_rgba(0,0,0,0.1)]">
-                                            <div class="flex gap-3 w-full sm:w-auto">
-                                                <input v-model.number="newItem.amount" type="number" step="0.01" placeholder="€ 0,00" required class="flex-1 sm:w-32 bg-white retro-border rounded-xl p-3 text-sm font-black outline-none focus:bg-retro-cream shadow-[inset_2px_2px_0px_rgba(0,0,0,0.1)]">
-                                                <button type="submit" class="bg-retro-yellow retro-border shadow-[2px_2px_0px_#292524] retro-btn text-retro-dark p-3 rounded-xl px-4 font-black shrink-0"><i class="fa-solid fa-check"></i></button>
+                                    <div v-if="isEditing" class="bg-retro-teal retro-border retro-shadow rounded-xl p-3.5 mt-4">
+                                        <p class="text-[10px] font-black text-retro-dark uppercase tracking-widest mb-2"><i class="fa-solid fa-plus mr-1"></i> Adicionar Entrada</p>
+                                        <form @submit.prevent="addItem('incomes')" class="flex flex-col sm:flex-row gap-2">
+                                            <input v-model="newItem.name" type="text" placeholder="NOME DA RENDA" required class="flex-1 bg-white retro-border rounded-lg p-2 text-xs font-black outline-none focus:bg-retro-cream">
+                                            <div class="flex gap-2 w-full sm:w-auto">
+                                                <input v-model.number="newItem.amount" type="number" step="0.01" placeholder="VALOR R$" required class="flex-1 sm:w-28 bg-white retro-border rounded-lg p-2 text-xs font-black outline-none focus:bg-retro-cream">
+                                                <button type="submit" class="bg-retro-yellow retro-border shadow-[2px_2px_0px_#292524] retro-btn text-retro-dark p-2 rounded-lg px-3 font-black shrink-0"><i class="fa-solid fa-check"></i></button>
                                             </div>
                                         </form>
                                     </div>
                                 </div>
                             </section>
 
-                            <!-- SAÍDAS FIXAS & CARTÕES DE CRÉDITO -->
+                            <!-- SAÍDAS FIXAS MANUAIS -->
                             <section>
-                                <div class="flex items-center justify-between mb-4 px-1 bg-white retro-border p-3 rounded-xl shadow-[4px_4px_0px_#292524]">
-                                    <h4 class="text-sm font-black text-retro-dark uppercase tracking-widest"><i class="fa-solid fa-arrow-up mr-2 text-retro-pink"></i>Saídas & Faturas</h4>
-                                    <span class="text-[10px] font-black text-retro-dark bg-retro-pink retro-border px-2 py-1 rounded-md shadow-[2px_2px_0px_#292524]">{{ fixedExpenses.filter(e => e.paid).length }} / {{ fixedExpenses.length }} OK</span>
+                                <div class="flex items-center justify-between mb-3 px-1 bg-white retro-border p-2.5 rounded-xl shadow-[2px_2px_0px_#292524]">
+                                    <h4 class="text-xs font-black text-retro-dark uppercase tracking-widest"><i class="fa-solid fa-arrow-up mr-2 text-retro-pink"></i>Saídas Fixas</h4>
+                                    <span class="text-[9px] font-black text-retro-dark bg-retro-pink retro-border px-1.5 py-0.5 rounded shadow-[1px_1px_0px_#292524]">{{ fixedExpenses.filter(e => e.paid).length }} / {{ fixedExpenses.length }} OK</span>
                                 </div>
 
-                                <div class="space-y-4">
-                                    <div v-for="expense in fixedExpenses" :key="expense.id" class="bg-white retro-border rounded-2xl p-4 retro-shadow flex flex-col gap-3 relative overflow-hidden transition-opacity" :class="expense.paid && !isEditing ? 'opacity-80' : ''">
+                                <div class="space-y-3">
+                                    <div v-for="expense in fixedExpenses" :key="expense.id" class="bg-white retro-border rounded-xl p-3.5 shadow-[2px_2px_0px_#292524] flex flex-col gap-3 relative overflow-hidden transition-opacity" :class="expense.paid && !isEditing ? 'opacity-80' : ''">
                                         
                                         <div v-if="expense.paid && !isEditing" class="absolute left-0 top-0 bottom-0 w-2 bg-retro-pink border-r-[3px] border-retro-dark"></div>
 
                                         <div class="flex items-center justify-between gap-2 w-full">
                                             <template v-if="!isEditing">
-                                                <div class="flex items-center gap-3 pl-2 flex-1">
-                                                    <div>
-                                                        <p class="font-black text-retro-dark text-base uppercase" :class="expense.paid ? 'line-through decoration-2 decoration-retro-pink' : ''">
-                                                            <i v-if="expense.isCard" class="fa-regular fa-credit-card mr-2 text-retro-pink"></i> 
+                                                <div class="flex items-center gap-3 pl-1 flex-1 min-w-0">
+                                                    <div class="min-w-0">
+                                                        <p class="font-black text-retro-dark text-sm uppercase truncate" :class="expense.paid ? 'line-through decoration-2 decoration-retro-pink' : ''">
                                                             {{ expense.name }}
                                                         </p>
-                                                        <p class="font-black text-retro-dark text-lg" :class="expense.paid ? 'opacity-70' : ''">{{ formatCurrency(getExpenseAmount(expense)) }}</p>
+                                                        <div class="flex items-center gap-2 my-1">
+                                                            <span v-if="expense.method === 'credito'" class="text-[8px] font-black uppercase text-retro-pink bg-retro-pink/10 border border-retro-pink px-1 rounded">
+                                                                💳 {{ expense.installments > 1 ? expense.installments + 'x (' + formatCurrency(expense.totalAmount) + ')' : 'Crédito' }}
+                                                            </span>
+                                                            <span v-else class="text-[8px] font-black uppercase text-retro-teal bg-retro-teal/10 border border-retro-teal px-1 rounded">💵 Dinheiro</span>
+                                                        </div>
+                                                        <p class="font-black text-retro-dark text-base" :class="expense.paid ? 'opacity-70' : ''">{{ formatCurrency(expense.amount) }}</p>
                                                     </div>
                                                 </div>
-                                                <button @click="toggleStatus(expense, 'paid')" class="w-12 h-12 rounded-xl retro-border flex items-center justify-center retro-btn transition-colors shrink-0" :class="expense.paid ? 'bg-retro-pink shadow-[2px_2px_0px_#292524]' : 'bg-gray-100 shadow-[2px_2px_0px_#292524] hover:bg-retro-cream'">
-                                                    <i class="fa-solid" :class="expense.paid ? 'fa-check text-retro-dark' : 'fa-hand-pointer text-gray-400'"></i>
+                                                <button @click="toggleStatus(expense, 'paid')" class="w-10 h-10 rounded-lg retro-border flex items-center justify-center retro-btn transition-colors shrink-0" :class="expense.paid ? 'bg-retro-pink shadow-[2px_2px_0px_#292524]' : 'bg-gray-100 shadow-[2px_2px_0px_#292524] hover:bg-retro-cream'">
+                                                    <i class="fa-solid text-sm" :class="expense.paid ? 'fa-check text-retro-dark' : 'fa-hand-pointer text-gray-400'"></i>
                                                 </button>
                                             </template>
                                             <template v-else>
-                                                <div class="flex flex-1 items-center gap-2 w-full">
-                                                    <button @click="removeItem('fixedExpenses', expense.id)" class="bg-retro-pink retro-border shadow-[2px_2px_0px_#292524] retro-btn text-retro-dark w-10 h-10 rounded-xl flex items-center justify-center shrink-0"><i class="fa-solid fa-trash-can"></i></button>
-                                                    <input v-model="expense.name" type="text" class="flex-1 w-full bg-retro-cream retro-border rounded-xl p-2.5 text-sm font-black text-retro-dark outline-none focus:bg-white shadow-[inset_2px_2px_0px_rgba(0,0,0,0.1)]">
-                                                    <input v-if="!expense.isCard" v-model.number="expense.amount" type="number" class="w-24 md:w-32 bg-retro-cream retro-border rounded-xl p-2.5 text-sm font-black text-retro-dark outline-none focus:bg-white shadow-[inset_2px_2px_0px_rgba(0,0,0,0.1)]">
+                                                <div class="flex flex-1 items-start gap-2 w-full">
+                                                    <button @click="removeItem('fixedExpenses', expense.id)" class="bg-retro-pink retro-border shadow-[2px_2px_0px_#292524] retro-btn text-retro-dark w-10 h-10 rounded-lg flex items-center justify-center shrink-0"><i class="fa-solid fa-trash-can text-sm"></i></button>
+                                                    <div class="flex-1 flex flex-col sm:flex-row gap-2">
+                                                        <input v-model="expense.name" type="text" class="w-full bg-retro-cream retro-border rounded-lg p-2 text-xs font-black text-retro-dark outline-none focus:bg-white">
+                                                        
+                                                        <input v-if="expense.method !== 'credito'" v-model.number="expense.amount" type="number" class="w-full sm:w-28 bg-retro-cream retro-border rounded-lg p-2 text-xs font-black text-retro-dark outline-none focus:bg-white">
+                                                        
+                                                        <template v-else>
+                                                            <input v-model.number="expense.totalAmount" @input="expense.amount = (expense.totalAmount || 0) / (expense.installments || 1)" type="number" class="w-full sm:w-24 bg-retro-cream retro-border rounded-lg p-2 text-xs font-black text-retro-dark outline-none focus:bg-white" placeholder="Total R$">
+                                                            <select v-model.number="expense.installments" @change="expense.amount = (expense.totalAmount || 0) / (expense.installments || 1)" class="w-16 bg-retro-cream retro-border rounded-lg p-2 text-xs font-black text-retro-dark outline-none focus:bg-white appearance-none text-center">
+                                                                <option value="1">1x</option>
+                                                                <option value="2">2x</option>
+                                                                <option value="3">3x</option>
+                                                                <option value="4">4x</option>
+                                                                <option value="5">5x</option>
+                                                                <option value="6">6x</option>
+                                                                <option value="10">10x</option>
+                                                                <option value="12">12x</option>
+                                                            </select>
+                                                        </template>
+                                                    </div>
                                                 </div>
                                             </template>
                                         </div>
-
-                                        <!-- Tópicos do Cartão -->
-                                        <div v-if="expense.isCard && !isEditing && expense.subItems && expense.subItems.length > 0" class="pl-4 ml-1 border-l-[3px] border-dashed border-retro-dark/30 space-y-1.5 w-full mt-1">
-                                            <div v-for="sub in expense.subItems" :key="sub.id" class="flex justify-between items-center text-[11px] font-black text-retro-dark" :class="expense.paid ? 'opacity-50 line-through decoration-retro-pink' : 'opacity-80'">
-                                                <span class="uppercase tracking-widest"><i class="fa-solid fa-caret-right mr-1"></i>{{ sub.name }}</span>
-                                                <span>{{ formatCurrency(sub.amount) }}</span>
-                                            </div>
-                                        </div>
-
-                                        <div v-if="expense.isCard && isEditing" class="pl-4 ml-[52px] border-l-[3px] border-dashed border-retro-dark/30 space-y-2 w-full pr-1">
-                                            <div v-for="(sub, idx) in expense.subItems" :key="sub.id" class="flex gap-2 w-full">
-                                                <input v-model="sub.name" type="text" placeholder="Tópico" class="flex-1 min-w-0 bg-white retro-border rounded-lg p-2 text-xs font-black text-retro-dark outline-none focus:bg-retro-cream shadow-[inset_2px_2px_0px_rgba(0,0,0,0.1)]">
-                                                <input v-model.number="sub.amount" type="number" placeholder="€ 0" class="w-20 sm:w-24 bg-white retro-border rounded-lg p-2 text-xs font-black text-retro-dark outline-none focus:bg-retro-cream shadow-[inset_2px_2px_0px_rgba(0,0,0,0.1)]">
-                                                <button @click="expense.subItems.splice(idx, 1)" class="text-retro-pink hover:text-red-600 px-1 shrink-0"><i class="fa-solid fa-xmark text-lg"></i></button>
-                                            </div>
-                                            <button @click="expense.subItems.push({id: Date.now(), name: '', amount: null})" class="text-[10px] bg-retro-yellow retro-border shadow-[2px_2px_0px_#292524] px-2.5 py-1.5 rounded-lg font-black uppercase tracking-wider retro-btn inline-flex items-center">
-                                                <i class="fa-solid fa-plus mr-1"></i> Adicionar Tópico
-                                            </button>
-                                        </div>
                                     </div>
 
-                                    <div v-if="isEditing" class="bg-retro-pink retro-border retro-shadow rounded-2xl p-4 mt-4">
-                                        <p class="text-xs font-black text-retro-dark uppercase tracking-widest mb-2"><i class="fa-solid fa-plus mr-1"></i> Nova Saída / Fatura</p>
-                                        <form @submit.prevent="addItem('fixedExpenses')" class="flex flex-col gap-3">
-                                            <div class="flex flex-col sm:flex-row gap-3">
-                                                <input v-model="newItem.name" type="text" placeholder="Nome (Ex: Fatura Cartão)" required class="flex-1 bg-white retro-border rounded-xl p-3 text-sm font-black outline-none focus:bg-retro-cream shadow-[inset_2px_2px_0px_rgba(0,0,0,0.1)]">
-                                                <div class="flex gap-3 w-full sm:w-auto">
-                                                    <input v-if="!newItem.isCard" v-model.number="newItem.amount" type="number" step="0.01" placeholder="€ 0,00" required class="flex-1 sm:w-32 bg-white retro-border rounded-xl p-3 text-sm font-black outline-none focus:bg-retro-cream shadow-[inset_2px_2px_0px_rgba(0,0,0,0.1)]">
-                                                    <button type="submit" class="bg-retro-yellow retro-border shadow-[2px_2px_0px_#292524] retro-btn text-retro-dark p-3 rounded-xl px-4 font-black shrink-0"><i class="fa-solid fa-check"></i></button>
+                                    <div v-if="isEditing" class="bg-retro-pink retro-border retro-shadow rounded-xl p-3.5 mt-4">
+                                        <p class="text-[10px] font-black text-retro-dark uppercase tracking-widest mb-2"><i class="fa-solid fa-plus mr-1"></i> Adicionar Conta Fixa</p>
+                                        <form @submit.prevent="addItem('fixedExpenses')" class="flex flex-col gap-2">
+                                            <div class="flex gap-2 mb-1">
+                                                <button type="button" @click="newItem.method = 'dinheiro'" class="flex-1 py-2 rounded-lg border-[2px] border-retro-dark font-black text-[9px] uppercase transition-all flex items-center justify-center gap-1" :class="newItem.method === 'dinheiro' ? 'bg-retro-teal shadow-[2px_2px_0px_#292524] scale-100' : 'bg-gray-100 opacity-60 scale-95 hover:opacity-100'">
+                                                    💵 Dinheiro
+                                                </button>
+                                                <button type="button" @click="newItem.method = 'credito'" class="flex-1 py-2 rounded-lg border-[2px] border-retro-dark font-black text-[9px] uppercase transition-all flex items-center justify-center gap-1" :class="newItem.method === 'credito' ? 'bg-retro-pink shadow-[2px_2px_0px_#292524] scale-100 text-white' : 'bg-gray-100 opacity-60 scale-95 hover:opacity-100'">
+                                                    💳 Crédito
+                                                </button>
+                                            </div>
+
+                                            <div class="flex flex-col sm:flex-row gap-2">
+                                                <input v-model="newItem.name" type="text" placeholder="NOME DA CONTA (EX: NETFLIX)" required class="flex-1 bg-white retro-border rounded-lg p-2 text-xs font-black outline-none focus:bg-retro-cream">
+                                                <div class="flex gap-2 w-full sm:w-auto">
+                                                    <input v-model.number="newItem.amount" type="number" step="0.01" :placeholder="newItem.method === 'credito' ? 'TOTAL R$' : 'VALOR R$'" required class="flex-1 sm:w-28 bg-white retro-border rounded-lg p-2 text-xs font-black outline-none focus:bg-retro-cream">
+                                                    
+                                                    <select v-if="newItem.method === 'credito'" v-model.number="newItem.installments" class="w-16 bg-white retro-border rounded-lg p-2 text-xs font-black outline-none focus:bg-retro-cream appearance-none cursor-pointer text-center">
+                                                        <option value="1">1x</option>
+                                                        <option value="2">2x</option>
+                                                        <option value="3">3x</option>
+                                                        <option value="4">4x</option>
+                                                        <option value="5">5x</option>
+                                                        <option value="6">6x</option>
+                                                        <option value="10">10x</option>
+                                                        <option value="12">12x</option>
+                                                    </select>
+
+                                                    <button type="submit" class="bg-retro-yellow retro-border shadow-[2px_2px_0px_#292524] retro-btn text-retro-dark p-2 rounded-lg px-3 font-black shrink-0"><i class="fa-solid fa-check"></i></button>
                                                 </div>
                                             </div>
-                                            <label class="flex items-center gap-2 cursor-pointer mt-1">
-                                                <input type="checkbox" v-model="newItem.isCard" class="w-4 h-4 accent-retro-dark retro-border cursor-pointer">
-                                                <span class="text-[11px] font-black text-retro-dark uppercase tracking-wider bg-white border-2 border-retro-dark px-2 py-0.5 rounded shadow-[2px_2px_0px_#292524]">Fatura com vários tópicos</span>
-                                            </label>
+                                            <div v-if="newItem.method === 'credito' && newItem.installments > 1 && newItem.amount" class="text-[10px] font-black text-retro-pink text-right bg-retro-pink/10 p-2 rounded-lg border-2 border-retro-pink border-dashed mt-2">
+                                                Na Fatura: {{ newItem.installments }}x de {{ formatCurrency((newItem.amount || 0) / newItem.installments) }}
+                                            </div>
                                         </form>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <!-- FATURA AUTOMÁTICA CARTÃO DE CRÉDITO -->
+                            <section>
+                                <div class="bg-retro-cream retro-border rounded-xl p-4 shadow-[2px_2px_0px_#292524] flex flex-col gap-2 relative overflow-hidden mt-4">
+                                    <div class="flex items-center justify-between gap-3">
+                                        <div class="flex items-center gap-3 pl-1">
+                                            <div class="w-10 h-10 rounded-lg bg-retro-pink flex items-center justify-center retro-border shrink-0"><i class="fa-regular fa-credit-card text-white"></i></div>
+                                            <div>
+                                                <p class="font-black text-retro-dark text-sm uppercase">Fatura Atual do Cartão</p>
+                                                <p class="text-[9px] font-bold text-gray-500 uppercase leading-tight mt-0.5">Gastos Fixos e Diários no Crédito</p>
+                                            </div>
+                                        </div>
+                                        <p class="font-black text-retro-dark text-lg whitespace-nowrap">{{ formatCurrency(creditPurchasesThisMonth) }}</p>
                                     </div>
                                 </div>
                             </section>
                         </div>
 
+                        <!-- ================= ABA: COFRINHO ================= -->
+                        <div v-if="activeTab === 'cofrinho'" class="space-y-6 animate-fade-in w-full">
+                            <div class="bg-retro-blue p-6 rounded-2xl retro-border retro-shadow">
+                                <h3 class="font-black text-retro-dark text-xl uppercase tracking-tighter"><i class="fa-solid fa-piggy-bank mr-2"></i> Cofrinho</h3>
+                                <p class="text-[10px] font-black uppercase tracking-widest mt-1">Dinheiro Guardado e Protegido</p>
+                            </div>
+
+                            <div class="bg-white retro-border retro-shadow rounded-2xl p-5">
+                                <h4 class="font-black text-sm uppercase tracking-widest mb-3"><i class="fa-solid fa-plus mr-2 text-retro-pink"></i>Nova Meta</h4>
+                                <form @submit.prevent="createGoal" class="flex flex-col sm:flex-row gap-3">
+                                    <input v-model="newGoal.name" type="text" placeholder="OBJETIVO (EX: VIAGEM)" required class="flex-1 bg-retro-cream retro-border rounded-xl p-3 text-xs font-black outline-none focus:bg-white shadow-[inset_2px_2px_0px_rgba(0,0,0,0.05)]">
+                                    <div class="flex gap-3">
+                                        <input v-model.number="newGoal.target" type="number" step="0.01" placeholder="META R$" required class="flex-1 sm:w-32 bg-retro-cream retro-border rounded-xl p-3 text-xs font-black outline-none focus:bg-white shadow-[inset_2px_2px_0px_rgba(0,0,0,0.05)]">
+                                        <button type="submit" class="bg-retro-yellow retro-border shadow-[2px_2px_0px_#292524] retro-btn text-retro-dark p-3 rounded-xl px-4 font-black shrink-0"><i class="fa-solid fa-check"></i></button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div v-for="goal in savings" :key="goal.id" class="bg-white retro-border rounded-2xl p-5 retro-shadow relative overflow-hidden">
+                                    <div class="flex justify-between items-start mb-3">
+                                        <div class="pr-2">
+                                            <h4 class="font-black text-base md:text-lg uppercase leading-tight">{{ goal.name }}</h4>
+                                            <p class="text-[10px] font-bold text-gray-500 uppercase mt-1">Guardado: <span class="text-retro-dark">{{ formatCurrency(goal.amount) }}</span> / {{ formatCurrency(goal.target) }}</p>
+                                        </div>
+                                        <button @click="removeGoal(goal.id)" class="text-retro-pink hover:text-red-600 bg-red-50 p-2 rounded-lg border-2 border-transparent hover:border-retro-pink transition-colors"><i class="fa-solid fa-trash-can"></i></button>
+                                    </div>
+                                    
+                                    <div class="w-full bg-retro-cream retro-border rounded-full h-4 overflow-hidden shadow-inner mb-4 relative">
+                                        <div class="h-full bg-retro-teal border-r-[3px] border-retro-dark transition-all duration-1000 relative" :style="{ width: Math.min((goal.amount / goal.target) * 100, 100) + '%' }">
+                                            <div class="absolute inset-0 opacity-20" style="background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, #000 10px, #000 20px);"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <form @submit.prevent="depositMoney(goal.id)" class="flex gap-2">
+                                        <input v-model.number="depositAmounts[goal.id]" type="number" step="0.01" placeholder="GUARDAR R$" required class="flex-1 bg-[#fdf8f5] retro-border rounded-xl p-2.5 text-xs font-black outline-none focus:bg-retro-cream">
+                                        <button type="submit" class="bg-retro-blue retro-border shadow-[2px_2px_0px_#292524] retro-btn text-retro-dark px-4 py-2.5 rounded-xl font-black text-[10px] uppercase">Guardar</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- ================= ABA: LANÇAMENTOS DIÁRIOS E SCANNER ================= -->
                         <div v-if="activeTab === 'diario'" class="space-y-6 animate-fade-in">
                             
-                            <!-- Scanner Inteligente -->
-                            <div class="bg-retro-yellow retro-border retro-shadow rounded-2xl p-6">
-                                <h3 class="font-black text-retro-dark mb-4 text-base uppercase tracking-tighter"><i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Leitor Inteligente (IA)</h3>
-                                
-                                <div class="relative bg-white retro-border rounded-xl p-6 text-center transition-colors hover:bg-retro-cream cursor-pointer group">
-                                    <input type="file" accept="image/*" @change="handleScan" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
-                                    <div class="relative z-0">
-                                        <div class="w-12 h-12 bg-retro-pink rounded-full border-2 border-retro-dark flex items-center justify-center mx-auto mb-3 shadow-[2px_2px_0px_#292524] group-hover:scale-110 transition-transform">
-                                            <i class="fa-solid fa-camera text-white text-lg"></i>
-                                        </div>
-                                        <p class="font-black uppercase tracking-tighter text-sm">Escanear Fatura/Recibo</p>
-                                        <p class="text-[9px] font-bold text-gray-500 mt-1 uppercase tracking-widest">A inteligência lê os itens por ti!</p>
+                            <!-- Lançamento Manual Inteligente (Dinheiro vs Crédito) -->
+                            <div class="bg-white retro-border retro-shadow rounded-2xl p-5 md:p-6">
+                                <div class="flex justify-between items-center mb-4 border-b-[3px] border-retro-dark pb-3">
+                                    <h3 class="font-black text-retro-dark text-sm uppercase tracking-tighter"><i class="fa-solid fa-pen mr-2"></i> Adicionar Gasto</h3>
+                                    <!-- Botão miniatura do scanner -->
+                                    <div class="relative overflow-hidden">
+                                        <input type="file" accept="image/*" @change="handleScan" class="absolute inset-0 opacity-0 cursor-pointer z-10" />
+                                        <button type="button" class="bg-retro-yellow retro-border shadow-[2px_2px_0px_#292524] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all px-2 py-1 rounded font-black text-[9px] uppercase tracking-widest flex items-center">
+                                            <i class="fa-solid fa-camera mr-1"></i> Scan
+                                        </button>
                                     </div>
                                 </div>
 
-                                <div v-if="isProcessing" class="mt-4 p-4 bg-white retro-border rounded-xl flex flex-col items-center">
+                                <div v-if="isProcessing" class="mt-4 p-4 bg-retro-cream retro-border rounded-xl flex flex-col items-center mb-4">
                                     <i class="fa-solid fa-spinner fa-spin text-2xl mb-2 text-retro-teal"></i>
-                                    <p class="font-black text-xs uppercase tracking-widest text-retro-dark">A ler o recibo...</p>
+                                    <p class="font-black text-[10px] uppercase tracking-widest text-retro-dark">Analisando nota com IA...</p>
                                 </div>
 
-                                <div v-if="scannedItems.length > 0 && !isProcessing" class="mt-4 bg-white retro-border rounded-xl p-4">
-                                    <p class="text-[10px] font-black uppercase tracking-widest mb-2 border-b-2 border-dashed border-retro-dark pb-1">Itens Identificados</p>
-                                    <div class="max-h-32 overflow-y-auto space-y-1">
-                                        <div v-for="item in scannedItems" class="flex justify-between text-[10px] font-bold uppercase">
-                                            <span class="truncate pr-2">{{ item.qty }}x {{ item.name }}</span>
-                                            <span class="font-black">{{ formatCurrency(item.price) }}</span>
-                                        </div>
+                                <form @submit.prevent="addDailyExpense" class="space-y-3">
+                                    
+                                    <div class="flex gap-2 mb-3">
+                                        <button type="button" @click="newExpense.method = 'dinheiro'" class="flex-1 py-2.5 rounded-xl border-[3px] border-retro-dark font-black text-[10px] uppercase transition-all flex items-center justify-center gap-1.5" :class="newExpense.method === 'dinheiro' ? 'bg-retro-teal shadow-[2px_2px_0px_#292524] scale-100' : 'bg-gray-100 opacity-60 scale-95 hover:opacity-100'">
+                                            <i class="fa-solid fa-money-bill-wave"></i> Dinheiro
+                                        </button>
+                                        <button type="button" @click="newExpense.method = 'credito'" class="flex-1 py-2.5 rounded-xl border-[3px] border-retro-dark font-black text-[10px] uppercase transition-all flex items-center justify-center gap-1.5" :class="newExpense.method === 'credito' ? 'bg-retro-pink shadow-[2px_2px_0px_#292524] scale-100 text-white' : 'bg-gray-100 opacity-60 scale-95 hover:opacity-100'">
+                                            <i class="fa-regular fa-credit-card"></i> Crédito
+                                        </button>
                                     </div>
-                                </div>
-                            </div>
 
-                            <!-- Lançamento Manual -->
-                            <div class="bg-white retro-border retro-shadow rounded-2xl p-6">
-                                <h3 class="font-black text-retro-dark mb-4 text-base uppercase tracking-tighter"><i class="fa-solid fa-pen mr-2"></i> Novo Lançamento</h3>
-                                <form @submit.prevent="addDailyExpense" class="space-y-4">
-                                    <input v-model="newExpense.name" type="text" placeholder="O QUE COMPRASTE? (EX: MERCADO, UBER)" required class="w-full bg-[#fdf8f5] retro-border rounded-xl p-4 text-sm font-black text-retro-dark outline-none focus:bg-retro-cream shadow-[inset_2px_2px_0px_rgba(0,0,0,0.1)] placeholder:text-gray-400">
-                                    <div class="flex gap-4">
-                                        <input v-model.number="newExpense.amount" type="number" step="0.01" placeholder="VALOR" required class="flex-1 bg-[#fdf8f5] retro-border rounded-xl p-4 text-sm font-black text-retro-dark outline-none focus:bg-retro-cream shadow-[inset_2px_2px_0px_rgba(0,0,0,0.1)]">
-                                        <select v-model="newExpense.budgetId" class="flex-1 bg-[#fdf8f5] retro-border rounded-xl p-4 text-sm font-black text-retro-dark outline-none focus:bg-retro-cream shadow-[inset_2px_2px_0px_rgba(0,0,0,0.1)] appearance-none cursor-pointer">
+                                    <input v-model="newExpense.name" type="text" placeholder="O QUE FOI? (EX: UBER)" required class="w-full bg-[#fdf8f5] retro-border rounded-xl p-3 text-xs font-black text-retro-dark outline-none focus:bg-retro-cream shadow-[inset_2px_2px_0px_rgba(0,0,0,0.05)] placeholder:text-gray-400">
+                                    
+                                    <div class="flex gap-3">
+                                        <input v-model.number="newExpense.amount" type="number" step="0.01" :placeholder="newExpense.method === 'credito' ? 'VALOR TOTAL R$' : 'VALOR R$'" required class="flex-1 w-1/2 bg-[#fdf8f5] retro-border rounded-xl p-3 text-xs font-black text-retro-dark outline-none focus:bg-retro-cream shadow-[inset_2px_2px_0px_rgba(0,0,0,0.05)]">
+                                        
+                                        <select v-if="newExpense.method === 'credito'" v-model.number="newExpense.installments" class="w-20 bg-[#fdf8f5] retro-border rounded-xl p-3 text-xs font-black text-retro-dark outline-none focus:bg-retro-cream shadow-[inset_2px_2px_0px_rgba(0,0,0,0.05)] appearance-none cursor-pointer text-center">
+                                            <option value="1">1x</option>
+                                            <option value="2">2x</option>
+                                            <option value="3">3x</option>
+                                            <option value="4">4x</option>
+                                            <option value="5">5x</option>
+                                            <option value="6">6x</option>
+                                            <option value="10">10x</option>
+                                            <option value="12">12x</option>
+                                        </select>
+
+                                        <select v-model="newExpense.budgetId" class="flex-1 w-1/2 bg-[#fdf8f5] retro-border rounded-xl p-3 text-xs font-black text-retro-dark outline-none focus:bg-retro-cream shadow-[inset_2px_2px_0px_rgba(0,0,0,0.05)] appearance-none cursor-pointer">
                                             <option v-for="b in budgets" :value="b.id">{{ b.name }}</option>
                                         </select>
                                     </div>
-                                    <button type="submit" class="w-full bg-retro-teal text-retro-dark retro-border retro-shadow retro-btn font-black p-4 rounded-xl text-sm uppercase tracking-widest flex items-center justify-center">
+
+                                    <div v-if="newExpense.method === 'credito' && newExpense.installments > 1 && newExpense.amount" class="text-[10px] font-black text-retro-pink text-right bg-retro-pink/10 p-2 rounded-lg border-2 border-retro-pink border-dashed">
+                                        Na Fatura: {{ newExpense.installments }}x de {{ formatCurrency((newExpense.amount || 0) / newExpense.installments) }}
+                                    </div>
+
+                                    <!-- Lista de Itens do Scanner -->
+                                    <div v-if="scannedItems && scannedItems.length > 0" class="mt-2 bg-[#fdf8f5] retro-border rounded-xl p-3">
+                                        <p class="text-[9px] font-black uppercase tracking-widest mb-2 border-b-2 border-dashed border-retro-dark pb-1">Itens Identificados na Nota</p>
+                                        <div class="max-h-28 overflow-y-auto space-y-1 custom-scrollbar">
+                                            <div v-for="item in scannedItems" class="flex justify-between text-[9px] font-bold uppercase">
+                                                <span class="truncate pr-2">{{ item.qty }}x {{ item.name }}</span>
+                                                <span class="font-black">{{ formatCurrency(item.price) }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="w-full bg-retro-teal text-retro-dark retro-border retro-shadow retro-btn font-black p-3 rounded-xl text-xs uppercase tracking-widest flex items-center justify-center mt-2">
                                         <i class="fa-solid fa-check mr-2"></i> Guardar Lançamento
                                     </button>
                                 </form>
                             </div>
 
-                            <section>
-                                <h3 class="text-xs font-black text-retro-dark mb-4 uppercase tracking-widest bg-white border-2 border-retro-dark inline-block px-3 py-1.5 rounded-xl shadow-[2px_2px_0px_#292524]"><i class="fa-solid fa-clock-rotate-left mr-2"></i> Últimos Lançamentos</h3>
+                            <section class="pb-6">
+                                <h3 class="text-[10px] font-black text-retro-dark mb-3 uppercase tracking-widest bg-white border-2 border-retro-dark inline-block px-2 py-1 rounded-lg shadow-[2px_2px_0px_#292524]"><i class="fa-solid fa-clock-rotate-left mr-1.5"></i> Histórico do Mês</h3>
                                 
-                                <div v-if="dailyExpenses.length === 0" class="text-center py-8 text-retro-dark bg-white rounded-2xl retro-border retro-shadow border-dashed">
-                                    <p class="text-sm font-black uppercase tracking-widest">Nenhum registo.</p>
+                                <div v-if="dailyExpenses.length === 0" class="text-center py-6 text-retro-dark bg-white rounded-2xl retro-border retro-shadow border-dashed">
+                                    <p class="text-[10px] font-black uppercase tracking-widest opacity-50">Nenhum registro hoje.</p>
                                 </div>
                                 
                                 <div v-else class="space-y-3">
-                                    <div v-for="expense in dailyExpenses" :key="expense.id" class="bg-white retro-border rounded-2xl p-4 retro-shadow flex items-center justify-between gap-4">
-                                        <div class="flex items-center">
-                                            <div class="w-10 h-10 rounded-xl flex items-center justify-center mr-3 retro-border shadow-[2px_2px_0px_#292524]" :class="getBudget(expense.budgetId).color + ' text-retro-dark'">
-                                                <i :class="getBudget(expense.budgetId).icon + ' text-base'"></i>
+                                    <div v-for="expense in dailyExpenses" :key="expense.id" class="bg-white retro-border rounded-xl p-3 shadow-[2px_2px_0px_#292524] flex items-center justify-between gap-2">
+                                        <div class="flex items-center min-w-0 flex-1">
+                                            <div class="w-8 h-8 rounded-lg flex items-center justify-center mr-2.5 retro-border shadow-[1px_1px_0px_#292524]" :class="getBudget(expense.budgetId).color + ' text-retro-dark'">
+                                                <i :class="getBudget(expense.budgetId).icon + ' text-[10px]'"></i>
                                             </div>
-                                            <div>
-                                                <p class="font-black text-retro-dark text-sm uppercase leading-tight mb-0.5">{{ expense.name }}</p>
-                                                <p class="text-[9px] bg-retro-cream border border-retro-dark px-1.5 rounded font-black text-retro-dark uppercase inline-block">{{ expense.date }} • {{ getBudget(expense.budgetId).name }}</p>
+                                            <div class="min-w-0 pr-1 flex flex-col justify-center">
+                                                <p class="font-black text-retro-dark text-xs uppercase leading-tight truncate mb-0.5">{{ expense.name }}</p>
+                                                <p class="text-[8px] bg-retro-cream border border-retro-dark px-1 rounded font-black text-retro-dark uppercase inline-block whitespace-nowrap self-start">{{ expense.date }} • {{ getBudget(expense.budgetId).name }}</p>
                                             </div>
                                         </div>
-                                        <div class="flex items-center">
-                                            <span class="font-black text-retro-dark text-lg mr-3 bg-retro-yellow border-2 border-retro-dark px-1.5 py-0.5 rounded shadow-[2px_2px_0px_#292524]">{{ formatCurrency(expense.amount) }}</span>
-                                            <button @click="removeItem('dailyExpenses', expense.id)" class="bg-retro-pink retro-border text-retro-dark shadow-[2px_2px_0px_#292524] retro-btn w-8 h-8 rounded-lg flex items-center justify-center"><i class="fa-solid fa-trash-can text-sm"></i></button>
+                                        <div class="flex items-center gap-2 shrink-0">
+                                            <div class="flex flex-col items-end">
+                                                <span class="font-black text-retro-dark text-sm bg-retro-yellow border-2 border-retro-dark px-1.5 py-0.5 rounded shadow-[1px_1px_0px_#292524]">{{ formatCurrency(expense.amount) }}</span>
+                                                <span v-if="expense.method === 'credito'" class="text-[8px] font-black uppercase text-retro-pink mt-1 bg-retro-pink/10 border border-retro-pink px-1 rounded">💳 {{ expense.installments }}x ({{ formatCurrency(expense.totalAmount) }})</span>
+                                                <span v-else class="text-[8px] font-black uppercase text-retro-teal mt-1 bg-retro-teal/10 border border-retro-teal px-1 rounded">💵 Dinheiro</span>
+                                            </div>
+                                            <button @click="removeItem('dailyExpenses', expense.id)" class="bg-retro-pink retro-border text-white shadow-[1px_1px_0px_#292524] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none w-7 h-7 rounded-lg flex items-center justify-center"><i class="fa-solid fa-trash-can text-[10px]"></i></button>
                                         </div>
                                     </div>
                                 </div>
@@ -464,29 +625,32 @@
                     </div>
                 </div>
 
-                <!-- NAVEGAÇÃO MOBILE (EM BAIXO) -->
-                <nav class="md:hidden fixed bottom-0 left-0 w-full bg-[#fdf8f5] border-t-[3px] border-retro-dark flex justify-between z-50 pb-safe">
-                    <button @click="activeTab = 'resumo'" class="flex flex-col items-center justify-center w-full py-3 text-[10px] font-black uppercase tracking-widest transition-all border-r-[3px] border-retro-dark" :class="activeTab === 'resumo' ? 'bg-retro-teal text-retro-dark' : 'bg-white text-retro-dark hover:bg-retro-cream'">
-                        <i class="fa-solid fa-chart-pie text-xl mb-1"></i> Resumo
+                <!-- NAVEGAÇÃO MOBILE (EM BAIXO COM SAFE-AREA) -->
+                <nav class="md:hidden fixed bottom-0 left-0 w-full bg-[#fdf8f5] border-t-[3px] border-retro-dark flex justify-between z-50 pb-safe shadow-[0_-5px_15px_rgba(0,0,0,0.05)]">
+                    <button @click="activeTab = 'resumo'" class="flex-1 flex flex-col items-center justify-center py-2.5 text-[8px] font-black uppercase tracking-widest transition-all border-r-[3px] border-retro-dark" :class="activeTab === 'resumo' ? 'bg-retro-teal text-retro-dark' : 'bg-white text-retro-dark hover:bg-retro-cream'">
+                        <i class="fa-solid fa-chart-pie text-lg mb-1" :class="activeTab === 'resumo' ? 'scale-110 drop-shadow-md' : ''"></i> Resumo
                     </button>
-                    <button @click="activeTab = 'fixos'" class="flex flex-col items-center justify-center w-full py-3 text-[10px] font-black uppercase tracking-widest transition-all border-r-[3px] border-retro-dark" :class="activeTab === 'fixos' ? 'bg-retro-yellow text-retro-dark' : 'bg-white text-retro-dark hover:bg-retro-cream'">
-                        <i class="fa-solid fa-wallet text-xl mb-1"></i> Faturas
+                    <button @click="activeTab = 'fixos'" class="flex-1 flex flex-col items-center justify-center py-2.5 text-[8px] font-black uppercase tracking-widest transition-all border-r-[3px] border-retro-dark" :class="activeTab === 'fixos' ? 'bg-retro-yellow text-retro-dark' : 'bg-white text-retro-dark hover:bg-retro-cream'">
+                        <i class="fa-solid fa-wallet text-lg mb-1" :class="activeTab === 'fixos' ? 'scale-110 drop-shadow-md' : ''"></i> Contas
                     </button>
-                    <button @click="activeTab = 'diario'" class="flex flex-col items-center justify-center w-full py-3 text-[10px] font-black uppercase tracking-widest transition-all" :class="activeTab === 'diario' ? 'bg-retro-pink text-retro-dark' : 'bg-white text-retro-dark hover:bg-retro-cream'">
-                        <i class="fa-solid fa-camera text-xl mb-1"></i> Lançar
+                    <button @click="activeTab = 'cofrinho'" class="flex-1 flex flex-col items-center justify-center py-2.5 text-[8px] font-black uppercase tracking-widest transition-all border-r-[3px] border-retro-dark" :class="activeTab === 'cofrinho' ? 'bg-retro-blue text-retro-dark' : 'bg-white text-retro-dark hover:bg-retro-cream'">
+                        <i class="fa-solid fa-piggy-bank text-lg mb-1" :class="activeTab === 'cofrinho' ? 'scale-110 drop-shadow-md' : ''"></i> Cofrinho
+                    </button>
+                    <button @click="activeTab = 'diario'" class="flex-1 flex flex-col items-center justify-center py-2.5 text-[8px] font-black uppercase tracking-widest transition-all" :class="activeTab === 'diario' ? 'bg-retro-pink text-retro-dark' : 'bg-white text-retro-dark hover:bg-retro-cream'">
+                        <i class="fa-solid fa-camera text-lg mb-1" :class="activeTab === 'diario' ? 'scale-110 drop-shadow-md' : ''"></i> Lançar
                     </button>
                 </nav>
 
                 <!-- MODAL DE CONFIRMAÇÃO -->
                 <div v-if="showModal" class="fixed inset-0 bg-retro-dark/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4 animate-fade-in">
-                    <div class="bg-retro-cream retro-border rounded-2xl p-6 max-w-sm w-full retro-shadow-lg relative overflow-hidden">
-                        <div class="text-center mb-6 mt-2">
-                            <h3 class="text-2xl font-black text-retro-dark mb-2 uppercase tracking-tighter">{{ modalData.title }}</h3>
-                            <p class="text-sm font-bold text-retro-dark bg-white border-2 border-retro-dark rounded-xl p-3 shadow-[inset_2px_2px_0px_rgba(0,0,0,0.05)]">{{ modalData.message }}</p>
+                    <div class="bg-retro-cream retro-border rounded-2xl p-5 max-w-xs w-full retro-shadow-lg relative overflow-hidden">
+                        <div class="text-center mb-5 mt-1">
+                            <h3 class="text-xl font-black text-retro-dark mb-2 uppercase tracking-tighter">{{ modalData.title }}</h3>
+                            <p class="text-xs font-bold text-retro-dark bg-white border-2 border-retro-dark rounded-xl p-2.5 shadow-[inset_2px_2px_0px_rgba(0,0,0,0.05)]">{{ modalData.message }}</p>
                         </div>
-                        <div class="flex flex-col gap-3">
-                            <button @click="confirmModalAction" class="w-full bg-retro-pink text-retro-dark retro-border retro-shadow retro-btn font-black p-3 rounded-xl uppercase tracking-widest text-sm">Confirmar</button>
-                            <button @click="showModal = false" class="w-full bg-white text-retro-dark retro-border retro-shadow retro-btn font-black p-3 rounded-xl uppercase tracking-widest text-sm">Cancelar</button>
+                        <div class="flex flex-col gap-2">
+                            <button @click="confirmModalAction" class="w-full bg-retro-pink text-retro-dark retro-border retro-shadow retro-btn font-black p-2.5 rounded-xl uppercase tracking-widest text-xs">Confirmar</button>
+                            <button @click="showModal = false" class="w-full bg-white text-retro-dark retro-border retro-shadow retro-btn font-black p-2.5 rounded-xl uppercase tracking-widest text-xs">Cancelar</button>
                         </div>
                     </div>
                 </div>
@@ -502,7 +666,7 @@
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
         import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
 
-        // --- Configuração Firebase (Fornecida) ---
+        // --- Configuração Firebase ---
         const firebaseConfig = {
             apiKey: "AIzaSyBsB3qC7w0CixsEngzdnZQaEpekVQ1XilY",
             authDomain: "controlefinanceiro-111d6.firebaseapp.com",
@@ -519,29 +683,27 @@
         // --- Chave do Gemini injetada no ambiente ---
         const apiKey = ""; 
 
-        // --- Dados Iniciais Padrão ---
+        // --- Dados Iniciais Padrão Expandidos ---
         const defaultData = {
+            settings: { creditLimit: 2000 },
             incomes: [
-                { id: 1, name: 'Bolsa', amount: 1421, received: false }
+                { id: 1, name: 'Salário / Bolsa', amount: 1421, received: false }
             ],
             fixedExpenses: [
-                { 
-                    id: 2, 
-                    name: 'Fatura Nubank', 
-                    isCard: true, 
-                    paid: false, 
-                    subItems: [
-                        { id: 21, name: 'Ração e Areia', amount: 175 },
-                        { id: 22, name: 'Academia', amount: 160 }
-                    ] 
-                }
+                { id: 2, name: 'Aluguel', amount: 350, method: 'dinheiro', paid: false },
+                { id: 3, name: 'Assinatura Spotify', amount: 21.90, method: 'credito', installments: 1, totalAmount: 21.90, paid: false }
             ],
             budgets: [
                 { id: 'mercado', name: 'Supermercado', limit: 600, icon: 'fa-solid fa-basket-shopping', color: 'bg-retro-orange' },
-                { id: 'lazer', name: 'Lazer', limit: 282, icon: 'fa-solid fa-ice-cream', color: 'bg-retro-pink' },
-                { id: 'reserva', name: 'Poupança', limit: 300, icon: 'fa-solid fa-piggy-bank', color: 'bg-retro-blue' },
+                { id: 'lazer', name: 'Lazer', limit: 200, icon: 'fa-solid fa-ice-cream', color: 'bg-retro-pink' },
+                { id: 'transporte', name: 'Transporte', limit: 150, icon: 'fa-solid fa-car', color: 'bg-retro-blue' },
+                { id: 'pets', name: 'Gato / Pets', limit: 150, icon: 'fa-solid fa-cat', color: 'bg-retro-teal' },
+                { id: 'reserva', name: 'Outros', limit: 100, icon: 'fa-solid fa-wallet', color: 'bg-retro-yellow' },
             ],
-            dailyExpenses: []
+            dailyExpenses: [],
+            savings: [
+                { id: 1, name: 'Reserva de Emergência', amount: 0, target: 1000 }
+            ]
         };
 
         createApp({
@@ -553,24 +715,40 @@
                 const email = ref('');
                 const password = ref('');
                 const authError = ref('');
+                
+                // Animação de Splash
+                const showSplash = ref(true);
+                const hideSplashAnimation = ref(false);
 
+                const settings = ref({ creditLimit: 2000 });
                 const activeTab = ref('resumo');
                 const incomes = ref([]);
                 const fixedExpenses = ref([]);
                 const budgets = ref([]);
                 const dailyExpenses = ref([]);
+                const savings = ref([]);
                 
                 const isEditing = ref(false);
+                const isEditingBudgets = ref(false);
                 const isProcessing = ref(false);
                 const scannedItems = ref([]);
                 
-                const newItem = ref({ name: '', amount: '', isCard: false });
-                const newExpense = ref({ name: '', amount: '', budgetId: 'mercado', items: [] });
+                const newItem = ref({ name: '', amount: '', method: 'dinheiro', installments: 1 });
+                const newBudget = ref({ name: '', limit: '' });
+                const newExpense = ref({ name: '', amount: '', budgetId: 'mercado', method: 'dinheiro', installments: 1, items: [] });
+                
+                const newGoal = ref({ name: '', target: '' });
+                const depositAmounts = ref({});
 
                 const showModal = ref(false);
                 const modalData = ref({ title: '', message: '', action: null });
 
                 onMounted(() => {
+                    setTimeout(() => {
+                        hideSplashAnimation.value = true;
+                        setTimeout(() => { showSplash.value = false; }, 500);
+                    }, 2000);
+
                     onAuthStateChanged(auth, async (currentUser) => {
                         user.value = currentUser;
                         if (currentUser) {
@@ -588,11 +766,19 @@
                             await signInWithEmailAndPassword(auth, email.value, password.value);
                         } else {
                             const res = await createUserWithEmailAndPassword(auth, email.value, password.value);
-                            await setDoc(doc(db, 'users', res.user.uid), defaultData);
+                            try {
+                                await setDoc(doc(db, 'users', res.user.uid), defaultData);
+                            } catch (e) {
+                                console.error("Erro ao inicializar dados:", e);
+                            }
                         }
                         email.value = ''; password.value = '';
                     } catch (error) {
-                        authError.value = 'Erro ao autenticar. Verifica os dados.';
+                        console.error(error);
+                        if (error.code === 'auth/email-already-in-use') authError.value = 'Este e-mail já está cadastrado!';
+                        else if (error.code === 'auth/weak-password') authError.value = 'A senha deve ter no mínimo 6 caracteres!';
+                        else if (error.code === 'auth/invalid-credential') authError.value = 'E-mail ou senha incorretos!';
+                        else authError.value = error.message;
                     }
                     loading.value = false;
                 };
@@ -603,15 +789,25 @@
                     const docSnap = await getDoc(doc(db, 'users', uid));
                     if (docSnap.exists()) {
                         const data = docSnap.data();
+                        settings.value = data.settings || { creditLimit: 2000 };
                         incomes.value = data.incomes || [];
                         fixedExpenses.value = data.fixedExpenses || [];
-                        budgets.value = data.budgets || defaultData.budgets;
+                        
+                        // Garante que os orçamentos novos apareçam se a pessoa estiver usando uma conta antiga
+                        let b = data.budgets || defaultData.budgets;
+                        if(!b.find(x => x.id === 'transporte')) b.push({ id: 'transporte', name: 'Transporte', limit: 150, icon: 'fa-solid fa-car', color: 'bg-retro-blue' });
+                        if(!b.find(x => x.id === 'pets')) b.push({ id: 'pets', name: 'Gato / Pets', limit: 150, icon: 'fa-solid fa-cat', color: 'bg-retro-teal' });
+                        budgets.value = b;
+
                         dailyExpenses.value = data.dailyExpenses || [];
+                        savings.value = data.savings || defaultData.savings;
                     } else {
+                        settings.value = defaultData.settings;
                         incomes.value = defaultData.incomes;
                         fixedExpenses.value = defaultData.fixedExpenses;
                         budgets.value = defaultData.budgets;
                         dailyExpenses.value = defaultData.dailyExpenses;
+                        savings.value = defaultData.savings;
                         saveUserData();
                     }
                 };
@@ -619,33 +815,62 @@
                 const saveUserData = async () => {
                     if (!user.value) return;
                     await setDoc(doc(db, 'users', user.value.uid), {
+                        settings: settings.value,
                         incomes: incomes.value,
                         fixedExpenses: fixedExpenses.value,
                         budgets: budgets.value,
-                        dailyExpenses: dailyExpenses.value
+                        dailyExpenses: dailyExpenses.value,
+                        savings: savings.value
                     }, { merge: true });
                 };
 
-                watch([incomes, fixedExpenses, budgets, dailyExpenses], () => {
+                watch([settings, incomes, fixedExpenses, budgets, dailyExpenses, savings], () => {
                     if(!authLoading.value && user.value) saveUserData();
                 }, { deep: true });
 
-                const getExpenseAmount = (exp) => {
-                    if (exp.isCard) return (exp.subItems || []).reduce((acc, curr) => acc + (parseFloat(curr.amount) || 0), 0);
-                    return parseFloat(exp.amount) || 0;
+                const getExpenseAmount = (exp) => parseFloat(exp.amount) || 0;
+
+                const editCreditLimit = () => {
+                    const novo = prompt('Qual o Limite Total do seu Cartão de Crédito? (Apenas números)', settings.value.creditLimit);
+                    if(novo && !isNaN(novo)) {
+                        settings.value.creditLimit = parseFloat(novo);
+                    }
                 };
 
+                // ===== CÁLCULOS PRINCIPAIS =====
+                
+                // Dinheiro (Diário e Fixo)
+                const dailyCash = computed(() => dailyExpenses.value.filter(e => e.method !== 'credito').reduce((a, c) => a + c.amount, 0));
+                const fixedCash = computed(() => fixedExpenses.value.filter(e => e.method !== 'credito').reduce((a, c) => a + c.amount, 0));
+                
+                // Crédito (Parcela do mês e Abatimento Total)
+                const dailyCredit = computed(() => dailyExpenses.value.filter(e => e.method === 'credito').reduce((a, c) => a + c.amount, 0));
+                const dailyCreditTotal = computed(() => dailyExpenses.value.filter(e => e.method === 'credito').reduce((a, c) => a + (c.totalAmount || c.amount), 0));
+                
+                const fixedCredit = computed(() => fixedExpenses.value.filter(e => e.method === 'credito').reduce((a, c) => a + c.amount, 0));
+                const fixedCreditTotal = computed(() => fixedExpenses.value.filter(e => e.method === 'credito').reduce((a, c) => a + (c.totalAmount || c.amount), 0));
+
+                const creditPurchasesThisMonth = computed(() => dailyCredit.value + fixedCredit.value); // Fatura Atual
+                const totalCreditUsed = computed(() => dailyCreditTotal.value + fixedCreditTotal.value); // O que abate do limite
+                const availableCredit = computed(() => settings.value.creditLimit - totalCreditUsed.value);
+
                 const totalIncome = computed(() => incomes.value.reduce((a, c) => a + c.amount, 0));
-                const totalFixed = computed(() => fixedExpenses.value.reduce((a, c) => a + getExpenseAmount(c), 0));
-                const totalDaily = computed(() => dailyExpenses.value.reduce((a, c) => a + c.amount, 0));
-                const balance = computed(() => totalIncome.value - totalFixed.value - totalDaily.value);
+                const totalFixed = computed(() => fixedCash.value + fixedCredit.value); 
+                const totalSaved = computed(() => savings.value.reduce((a, c) => a + c.amount, 0));
+                
+                const balance = computed(() => totalIncome.value - fixedCash.value - dailyCash.value - creditPurchasesThisMonth.value - totalSaved.value);
+                
+                const totalBudgetLimit = computed(() => budgets.value.reduce((a, b) => a + Number(b.limit), 0));
+                const availableForBudgets = computed(() => totalIncome.value - totalFixed.value - totalSaved.value);
+
                 const receivedIncome = computed(() => incomes.value.filter(i => i.received).reduce((a, c) => a + c.amount, 0));
                 const paidFixed = computed(() => fixedExpenses.value.filter(e => e.paid).reduce((a, c) => a + getExpenseAmount(c), 0));
 
                 const formatCurrency = (val) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val || 0);
+                
                 const getBudgetSpent = (id) => dailyExpenses.value.filter(e => e.budgetId === id).reduce((a, c) => a + c.amount, 0);
                 const getBudgetPercentage = (id) => (getBudgetSpent(id) / (budgets.value.find(b => b.id === id)?.limit || 1)) * 100;
-                const getBudget = (id) => budgets.value.find(b => b.id === id) || budgets.value[0];
+                const getBudget = (id) => budgets.value.find(b => b.id === id) || { name: 'Sem Categoria', color: 'bg-retro-dark', icon: 'fa-solid fa-circle-question' };
                 const toggleStatus = (item, field) => { item[field] = !item[field]; };
 
                 const openModal = (title, message, action) => {
@@ -658,7 +883,7 @@
                 };
 
                 const confirmReset = () => {
-                    openModal('Limpar o Mês?', 'Isto limpará o status de todas as contas e o histórico de lançamentos. Desejas continuar?', () => {
+                    openModal('Limpar o Mês?', 'Isto limpará o status de todas as contas e o histórico de lançamentos diários. Suas metas e poupança serão mantidas. Deseja continuar?', () => {
                         dailyExpenses.value = [];
                         incomes.value.forEach(i => i.received = false);
                         fixedExpenses.value.forEach(e => e.paid = false);
@@ -669,42 +894,113 @@
                     if(listName === 'incomes') incomes.value = incomes.value.filter(i => i.id !== id);
                     if(listName === 'fixedExpenses') fixedExpenses.value = fixedExpenses.value.filter(i => i.id !== id);
                     if(listName === 'dailyExpenses') dailyExpenses.value = dailyExpenses.value.filter(i => i.id !== id);
+                    if(listName === 'budgets') budgets.value = budgets.value.filter(i => i.id !== id);
                 };
 
                 const addItem = (listName) => {
+                    if(listName === 'budgets') {
+                        if(!newBudget.value.name) return;
+                        const colors = ['bg-retro-orange', 'bg-retro-pink', 'bg-retro-blue', 'bg-retro-teal', 'bg-retro-yellow'];
+                        budgets.value.push({
+                            id: Date.now().toString(),
+                            name: newBudget.value.name,
+                            limit: parseFloat(newBudget.value.limit) || 0,
+                            icon: 'fa-solid fa-bullseye',
+                            color: colors[budgets.value.length % colors.length]
+                        });
+                        newBudget.value = { name: '', limit: '' };
+                        return;
+                    }
+
                     if(!newItem.value.name) return;
-                    const item = { id: Date.now(), name: newItem.value.name, received: false, paid: false };
+                    
+                    let itemAmount = parseFloat(newItem.value.amount) || 0;
+                    let totalVal = itemAmount;
+                    let parcelVal = itemAmount;
+                    let numInstallments = newItem.value.installments || 1;
+
+                    if (newItem.value.method === 'credito') {
+                        parcelVal = totalVal / numInstallments;
+                    }
+
+                    const item = { 
+                        id: Date.now(), 
+                        name: newItem.value.name, 
+                        amount: parcelVal, 
+                        totalAmount: totalVal,
+                        method: newItem.value.method || 'dinheiro',
+                        installments: numInstallments,
+                        received: false, 
+                        paid: false 
+                    };
                     
                     if(listName === 'incomes') {
-                        item.amount = parseFloat(newItem.value.amount) || 0;
-                        incomes.value.push(item);
+                        incomes.value.push({
+                            id: Date.now(),
+                            name: newItem.value.name,
+                            amount: totalVal,
+                            received: false
+                        });
                     } else if(listName === 'fixedExpenses') {
-                        if (newItem.value.isCard) {
-                            item.isCard = true;
-                            item.subItems = [];
-                        } else {
-                            item.amount = parseFloat(newItem.value.amount) || 0;
-                        }
                         fixedExpenses.value.push(item);
                     }
-                    newItem.value = { name: '', amount: '', isCard: false };
+                    newItem.value = { name: '', amount: '', method: 'dinheiro', installments: 1 };
                 };
 
                 const addDailyExpense = () => {
                     if(!newExpense.value.name || !newExpense.value.amount) return;
+                    
+                    let totalVal = parseFloat(newExpense.value.amount);
+                    let parcelVal = totalVal;
+                    let numInstallments = newExpense.value.installments || 1;
+
+                    if (newExpense.value.method === 'credito') {
+                        parcelVal = totalVal / numInstallments;
+                    }
+
                     dailyExpenses.value.unshift({
                         id: Date.now(),
                         name: newExpense.value.name,
-                        amount: parseFloat(newExpense.value.amount),
+                        amount: parcelVal, 
+                        totalAmount: totalVal,
+                        method: newExpense.value.method,
+                        installments: numInstallments,
                         budgetId: newExpense.value.budgetId,
                         date: new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
                         items: scannedItems.value
                     });
-                    newExpense.value = { name: '', amount: '', budgetId: 'mercado' };
+                    newExpense.value = { name: '', amount: '', budgetId: budgets.value[0]?.id || 'mercado', method: 'dinheiro', installments: 1, items: [] };
                     scannedItems.value = [];
                 };
 
-                // Lógica de Leitura da Fatura/Nota com Gemini 2.5 Flash
+                const createGoal = () => {
+                    if (!newGoal.value.name || !newGoal.value.target) return;
+                    savings.value.push({
+                        id: Date.now(),
+                        name: newGoal.value.name,
+                        target: parseFloat(newGoal.value.target),
+                        amount: 0
+                    });
+                    newGoal.value = { name: '', target: '' };
+                };
+
+                const depositMoney = (goalId) => {
+                    const amount = parseFloat(depositAmounts.value[goalId]);
+                    if (!amount || amount <= 0) return;
+                    
+                    const goalIndex = savings.value.findIndex(g => g.id === goalId);
+                    if (goalIndex !== -1) {
+                        savings.value[goalIndex].amount += amount;
+                        depositAmounts.value[goalId] = ''; 
+                    }
+                };
+
+                const removeGoal = (id) => {
+                    openModal('Excluir Meta?', 'Ao excluir esta meta, o dinheiro guardado volta para o Saldo Disponível.', () => {
+                        savings.value = savings.value.filter(g => g.id !== id);
+                    });
+                };
+
                 const handleScan = async (e) => {
                     const file = e.target.files[0];
                     if (!file) return;
@@ -736,7 +1032,9 @@
                                 newExpense.value = {
                                     name: extractedData.storeName || 'Supermercado',
                                     amount: extractedData.total || 0,
-                                    budgetId: 'mercado'
+                                    budgetId: 'mercado',
+                                    method: 'dinheiro',
+                                    installments: 1
                                 };
                                 scannedItems.value = extractedData.items || [];
                                 break;
@@ -746,16 +1044,22 @@
                             }
                         }
                         isProcessing.value = false;
-                        e.target.value = ''; // Reset input
+                        e.target.value = ''; 
                     };
                     reader.readAsDataURL(file);
                 };
 
+                const toggleAuthMode = () => {
+                    isLogin.value = !isLogin.value;
+                    authError.value = '';
+                };
+
                 return {
                     user, authLoading, loading, isLogin, email, password, authError, handleAuth, logout,
-                    activeTab, incomes, fixedExpenses, budgets, dailyExpenses, isEditing, isProcessing, newItem, newExpense, scannedItems,
-                    totalIncome, totalFixed, balance, receivedIncome, paidFixed,
-                    formatCurrency, getBudgetSpent, getBudgetPercentage, getBudget, getExpenseAmount, toggleStatus, removeItem, addItem, addDailyExpense, handleScan,
+                    showSplash, hideSplashAnimation, toggleAuthMode,
+                    activeTab, incomes, fixedExpenses, budgets, dailyExpenses, savings, isEditing, isEditingBudgets, isProcessing, newItem, newBudget, newExpense, newGoal, depositAmounts, scannedItems,
+                    totalIncome, totalFixed, totalSaved, balance, totalBudgetLimit, availableForBudgets, receivedIncome, paidFixed, creditPurchasesThisMonth, availableCredit, editCreditLimit,
+                    formatCurrency, getBudgetSpent, getBudgetPercentage, getBudget, getExpenseAmount, toggleStatus, removeItem, addItem, addDailyExpense, createGoal, depositMoney, removeGoal, handleScan,
                     showModal, modalData, confirmReset, confirmModalAction
                 };
             }
