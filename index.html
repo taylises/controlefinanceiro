@@ -72,6 +72,29 @@
         .heat-1 { background-color: #fcd34d; }
         .heat-2 { background-color: #fb923c; }
         .heat-3 { background-color: #fb7185; }
+
+        /* Ajustes específicos para mobile */
+        @media (max-width: 767px) {
+            #app {
+                height: 100dvh;
+                border-radius: 0;
+            }
+
+            main {
+                padding-bottom: calc(6.5rem + env(safe-area-inset-bottom, 0px));
+            }
+
+            header {
+                padding-top: calc(4.5rem + env(safe-area-inset-top, 0px));
+                padding-bottom: 1rem;
+            }
+
+            header > .absolute.top-4.left-1\/2 {
+                top: calc(1rem + env(safe-area-inset-top, 0px));
+                width: calc(100% - 1.5rem);
+                max-width: 18rem;
+            }
+        }
     </style>
 
     <script type="importmap">
@@ -573,7 +596,7 @@
                     </div>
                 </div>
 
-                <nav class="md:hidden absolute bottom-0 left-0 right-0 bg-[#fdf8f5] border-t-[3px] border-retro-dark flex justify-between z-50 shadow-[0_-5px_15px_rgba(0,0,0,0.05)] pb-safe">
+                <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-[#fdf8f5] border-t-[3px] border-retro-dark flex justify-between z-50 shadow-[0_-5px_15px_rgba(0,0,0,0.05)] pb-safe">
                     <button @click="activeTab = 'resumo'" class="flex-1 flex flex-col items-center justify-center py-3 text-[9px] font-black uppercase transition-all border-r-[3px] border-retro-dark" :class="activeTab === 'resumo' ? 'bg-retro-teal' : 'bg-white'">
                         <i class="fa-solid fa-chart-pie text-base mb-1"></i> Resumo
                     </button>
