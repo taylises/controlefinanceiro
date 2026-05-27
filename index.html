@@ -59,7 +59,6 @@
             100% { opacity: 0; transform: scale(1.1); pointer-events: none; visibility: hidden; }
         }
         
-        /* Heatmap dinâmico para o calendário */
         .heat-0 { background-color: #fef3c7; }
         .heat-1 { background-color: #fcd34d; }
         .heat-2 { background-color: #fb923c; }
@@ -81,6 +80,7 @@
 
     <div id="app" class="h-[100dvh] w-full max-w-6xl md:h-[90dvh] md:p-0 md:rounded-3xl relative overflow-hidden flex flex-col md:flex-row bg-[#fdf8f5] md:retro-border md:retro-shadow-lg" v-cloak>
         
+        <!-- Splash Screen -->
         <div v-if="showSplash" class="absolute inset-0 z-[999] bg-retro-yellow flex flex-col items-center justify-center" :class="{ 'splash-out': hideSplashAnimation }">
             <div class="bg-retro-dark p-6 rounded-3xl retro-border retro-shadow-lg transform -rotate-6 mb-6 z-10 relative">
                 <i class="fa-solid fa-bolt text-7xl text-retro-cream"></i>
@@ -89,6 +89,7 @@
             <h1 class="text-6xl font-black text-retro-pink tracking-tighter uppercase z-10" style="text-shadow: 4px 4px 0px #292524;">Controle</h1>
         </div>
 
+        <!-- Tela de Login -->
         <div v-show="!user && !authLoading && !showSplash" class="w-full h-full flex flex-col items-center justify-center p-6 bg-retro-cream relative z-10">
             <div class="w-full max-w-sm bg-white p-8 rounded-2xl retro-border retro-shadow-lg">
                 <div class="text-center mb-8">
@@ -123,6 +124,7 @@
 
         <template v-if="user && !authLoading && !showSplash">
             
+            <!-- Menu Desktop -->
             <aside class="hidden md:flex flex-col w-72 bg-retro-cream border-r-[3px] border-retro-dark p-6 z-20 shrink-0">
                 <div class="mb-8 mt-2 text-center">
                     <div class="bg-retro-pink w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4 retro-border retro-shadow transform rotate-3">
@@ -160,6 +162,7 @@
             <main class="flex-1 flex flex-col h-full relative overflow-hidden bg-[#fdf8f5]">
                 <div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#292524 2px, transparent 2px); background-size: 20px 20px;"></div>
                 
+                <!-- Header Superior com Navegação de Mês -->
                 <header class="bg-retro-dark text-retro-cream px-5 pt-6 pb-5 shadow-md z-20 shrink-0 border-b-[3px] border-retro-dark relative">
                     <div class="absolute top-4 left-1/2 transform -translate-x-1/2 bg-white text-retro-dark retro-border shadow-[2px_2px_0px_#fef3c7] rounded-full px-3 py-1 flex items-center gap-3 z-30">
                         <button @click="changeMonth(-1)" class="active:scale-90"><i class="fa-solid fa-chevron-left text-[10px]"></i></button>
@@ -175,7 +178,7 @@
                         <div class="flex flex-col md:flex-row gap-3">
                             <div class="bg-retro-teal p-4 rounded-xl border-[3px] border-retro-dark shadow-[4px_4px_0px_#fef3c7] flex-1 flex justify-between items-center relative overflow-hidden">
                                 <div class="z-10">
-                                    <p class="text-[#292524] text-[10px] font-black uppercase tracking-widest mb-1">Saldo em Dinheiro</p>
+                                    <p class="text-[#292524] text-[10px] font-black uppercase tracking-widest mb-1">Saldo Real em Dinheiro</p>
                                     <h2 class="text-3xl font-black tracking-tighter text-[#292524] leading-none">{{ formatCurrency(balance) }}</h2>
                                 </div>
                                 <i class="fa-solid fa-wallet text-4xl text-[#292524] opacity-20 transform -rotate-12"></i>
@@ -183,12 +186,12 @@
                             <div class="bg-retro-pink p-4 rounded-xl border-[3px] border-retro-dark shadow-[4px_4px_0px_#fef3c7] flex-1 flex justify-between items-center relative overflow-hidden">
                                 <div class="z-10 w-full">
                                     <div class="flex justify-between items-start w-full">
-                                        <p class="text-[#292524] text-[10px] font-black uppercase tracking-widest mb-1">Limite do Cartão</p>
+                                        <p class="text-[#292524] text-[10px] font-black uppercase tracking-widest mb-1">Limite Disponível</p>
                                         <button @click="editCreditLimit" class="text-[8px] bg-retro-dark text-retro-cream px-2 py-0.5 rounded font-black uppercase shadow-[1px_1px_0px_#fef3c7]">Editar</button>
                                     </div>
                                     <h2 class="text-2xl font-black tracking-tighter text-[#292524] leading-none">{{ formatCurrency(availableCredit) }}</h2>
                                     <div class="bg-white/40 border border-retro-dark/20 rounded px-2 py-0.5 mt-1 inline-block">
-                                        <p class="text-[#292524] text-[9px] font-black uppercase">Fatura: <span class="text-white bg-retro-dark px-1 rounded">{{ formatCurrency(creditPurchasesThisMonth) }}</span></p>
+                                        <p class="text-[#292524] text-[9px] font-black uppercase">Na Fatura: <span class="text-white bg-retro-dark px-1 rounded">{{ formatCurrency(faturaDesteMes) }}</span></p>
                                     </div>
                                 </div>
                                 <i class="fa-regular fa-credit-card absolute right-4 text-4xl text-[#292524] opacity-20 transform rotate-12"></i>
@@ -200,44 +203,20 @@
                 <div class="flex-1 overflow-y-auto p-4 md:p-8 pb-24 md:pb-8 relative z-10 custom-scrollbar">
                     <div class="max-w-4xl mx-auto">
                         
+                        <!-- ABA: ANALYTICS / RESUMO -->
                         <div v-if="activeTab === 'resumo'" class="space-y-6 animate-fade-in">
-                            
                             <div class="grid grid-cols-3 gap-2">
-                                <div class="bg-white p-3 rounded-xl retro-border retro-shadow flex flex-col justify-center text-center">
+                                <div class="bg-white p-3 rounded-xl retro-border retro-shadow flex flex-col justify-center text-center relative overflow-hidden">
                                     <p class="text-[8px] md:text-[10px] font-black uppercase tracking-widest">Entradas</p>
                                     <p class="font-black text-emerald-600 text-sm md:text-lg">{{ formatCurrency(totalIncome) }}</p>
                                 </div>
                                 <div class="bg-white p-3 rounded-xl retro-border retro-shadow flex flex-col justify-center text-center">
                                     <p class="text-[8px] md:text-[10px] font-black uppercase tracking-widest">Contas Fixas</p>
-                                    <p class="font-black text-rose-600 text-sm md:text-lg">{{ formatCurrency(totalFixed) }}</p>
+                                    <p class="font-black text-rose-600 text-sm md:text-lg">{{ formatCurrency(totalFixedCash) }}</p>
                                 </div>
                                 <div class="bg-white p-3 rounded-xl retro-border retro-shadow flex flex-col justify-center text-center">
                                     <p class="text-[8px] md:text-[10px] font-black uppercase tracking-widest">No Cofrinho</p>
                                     <p class="font-black text-retro-blue text-sm md:text-lg">{{ formatCurrency(totalSaved) }}</p>
-                                </div>
-                            </div>
-
-                            <div class="bg-white rounded-2xl retro-border retro-shadow p-5">
-                                <h4 class="font-black text-sm text-retro-dark uppercase tracking-widest mb-4 border-b-[3px] border-retro-dark pb-2">
-                                    <i class="fa-regular fa-calendar-days mr-2 text-retro-orange"></i> Ritmo de Gastos Diários
-                                </h4>
-                                <div class="grid grid-cols-7 gap-1 md:gap-2 text-center">
-                                    <div v-for="day in ['D','S','T','Q','Q','S','S']" class="text-[9px] font-black text-gray-400 mb-1">{{day}}</div>
-                                    <div v-for="empty in emptyDaysStart" :key="'e'+empty"></div>
-                                    <div v-for="day in calendarDays" :key="day.day" 
-                                         class="aspect-square rounded flex items-center justify-center text-[10px] font-bold retro-border relative cursor-default"
-                                         :class="getHeatClass(day.total)"
-                                         :title="'Gasto: ' + formatCurrency(day.total)">
-                                        <span :class="day.total > 0 ? 'text-retro-dark font-black' : 'text-gray-500'">{{ day.day }}</span>
-                                    </div>
-                                </div>
-                                <div class="flex items-center gap-2 mt-3 justify-end text-[8px] font-black uppercase text-gray-500">
-                                    <span>Menos</span>
-                                    <div class="w-3 h-3 heat-0 retro-border rounded-sm"></div>
-                                    <div class="w-3 h-3 heat-1 retro-border rounded-sm"></div>
-                                    <div class="w-3 h-3 heat-2 retro-border rounded-sm"></div>
-                                    <div class="w-3 h-3 heat-3 retro-border rounded-sm"></div>
-                                    <span>Mais</span>
                                 </div>
                             </div>
 
@@ -246,6 +225,7 @@
                                     <div>
                                         <h4 class="font-black text-sm text-retro-dark uppercase tracking-widest"><i class="fa-solid fa-bullseye mr-2 text-retro-blue"></i> Orçamentos</h4>
                                         <p class="text-[9px] font-bold text-gray-500 uppercase mt-1">Disponível: {{ formatCurrency(availableForBudgets) }}</p>
+                                        <p class="text-[8px] font-bold text-retro-pink mt-0.5">*(Soma lançamentos + fixos)</p>
                                     </div>
                                     <button @click="isEditingBudgets = !isEditingBudgets" class="bg-retro-yellow retro-border text-retro-dark shadow-[2px_2px_0px_#292524] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all px-2 py-1 rounded-lg font-black text-[9px] flex items-center uppercase shrink-0">
                                         <i :class="isEditingBudgets ? 'fa-solid fa-check mr-1' : 'fa-solid fa-pen-to-square mr-1'"></i> {{ isEditingBudgets ? 'Ok' : 'Editar' }}
@@ -293,78 +273,115 @@
                             </div>
                         </div>
 
+                        <!-- ABA: FIXOS E FATURAS -->
                         <div v-if="activeTab === 'fixos'" class="space-y-6 animate-fade-in">
                             <div class="flex justify-between items-center">
-                                <h3 class="text-lg font-black text-retro-dark uppercase tracking-tighter"><i class="fa-solid fa-money-bill-transfer mr-2 text-retro-orange"></i> Fixos e Faturas</h3>
+                                <h3 class="text-lg font-black text-retro-dark uppercase tracking-tighter"><i class="fa-solid fa-money-bill-transfer mr-2 text-retro-orange"></i> Contas & Faturas</h3>
                                 <button @click="isEditing = !isEditing" class="bg-retro-yellow retro-border text-retro-dark shadow-[2px_2px_0px_#292524] active:scale-95 transition-all px-3 py-1.5 rounded-lg font-black text-[10px] uppercase">
                                     <i :class="isEditing ? 'fa-solid fa-check' : 'fa-solid fa-pen-to-square'"></i> {{ isEditing ? 'Ok' : 'Editar' }}
                                 </button>
                             </div>
 
+                            <!-- FATURA DO CARTÃO (Cálculo Automático) -->
+                            <section class="bg-retro-dark text-white rounded-xl retro-border retro-shadow p-4 relative overflow-hidden">
+                                <!-- Efeito visual listrado no fundo -->
+                                <div class="absolute inset-0 opacity-[0.05]" style="background-image: repeating-linear-gradient(45deg, #fff, #fff 10px, transparent 10px, transparent 20px);"></div>
+                                
+                                <div class="relative z-10 flex justify-between items-center mb-3 border-b-2 border-white/20 pb-2">
+                                    <h4 class="text-xs font-black uppercase text-retro-yellow"><i class="fa-regular fa-credit-card mr-1"></i> Fatura do Mês</h4>
+                                    
+                                    <!-- Botão para pagar a fatura do mês atual -->
+                                    <button @click="toggleFaturaPaga" class="text-[9px] font-black uppercase px-2 py-1 rounded border-2 transition-all" 
+                                            :class="isFaturaPaga ? 'bg-retro-teal text-retro-dark border-retro-teal' : 'bg-transparent text-white border-white hover:bg-white/10'">
+                                        <i :class="isFaturaPaga ? 'fa-solid fa-check mr-1' : 'fa-regular fa-square mr-1'"></i> 
+                                        {{ isFaturaPaga ? 'Fatura Paga' : 'Marcar Paga' }}
+                                    </button>
+                                </div>
+                                <div class="relative z-10 flex justify-between items-end">
+                                    <div>
+                                        <p class="text-[9px] text-gray-300 font-bold mb-1 uppercase tracking-wider">Vencimento em {{ currentMonthName }}/{{ currentYear }}</p>
+                                        <p class="text-2xl font-black" :class="isFaturaPaga ? 'line-through text-gray-400' : 'text-retro-cream'">{{ formatCurrency(faturaDesteMes) }}</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-[8px] text-gray-400 font-bold max-w-[120px]">Soma de parcelas e gastos no crédito lançados em meses anteriores.</p>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <!-- ENTRADAS MENSAIS -->
                             <section class="bg-white rounded-xl retro-border retro-shadow p-4">
                                 <h4 class="text-xs font-black uppercase border-b-[3px] border-retro-dark pb-2 mb-3 text-retro-teal"><i class="fa-solid fa-arrow-down mr-1"></i> Entradas Mensais</h4>
                                 <div class="space-y-2">
-                                    <div v-for="inc in incomes" :key="inc.id" class="flex justify-between items-center p-2 bg-retro-cream retro-border rounded-lg" :class="inc.received && !isEditing ? 'opacity-60' : ''">
+                                    <div v-for="inc in incomes" :key="inc.id" class="flex justify-between items-center p-2 bg-retro-cream retro-border rounded-lg transition-all" :class="inc.received && !isEditing ? 'opacity-70 bg-emerald-50 border-emerald-800' : ''">
                                         <template v-if="!isEditing">
                                             <div class="flex items-center gap-2">
-                                                <button @click="toggleStatus(inc, 'received')" class="w-6 h-6 border-2 border-retro-dark rounded bg-white flex items-center justify-center">
-                                                    <i v-if="inc.received" class="fa-solid fa-check text-[10px]"></i>
+                                                <button @click="toggleStatus(inc, 'received')" class="w-6 h-6 border-2 border-retro-dark rounded bg-white flex items-center justify-center shadow-[1px_1px_0px_#292524] active:shadow-none active:translate-y-[1px]">
+                                                    <i v-if="inc.received" class="fa-solid fa-check text-[10px] text-emerald-600"></i>
                                                 </button>
-                                                <span class="text-xs font-black uppercase" :class="inc.received ? 'line-through' : ''">{{ inc.name }}</span>
+                                                <span class="text-xs font-black uppercase" :class="inc.received ? 'line-through text-gray-500' : ''">{{ inc.name }}</span>
                                             </div>
-                                            <span class="text-xs font-black">{{ formatCurrency(inc.amount) }}</span>
+                                            <div class="flex items-center gap-2">
+                                                <span class="text-xs font-black">{{ formatCurrency(inc.amount) }}</span>
+                                                <!-- Badge Visual Claro -->
+                                                <span v-if="inc.received" class="text-[8px] bg-emerald-200 text-emerald-800 border border-emerald-800 px-1 py-0.5 rounded font-black uppercase tracking-wider">Recebido</span>
+                                                <span v-else class="text-[8px] bg-gray-200 text-gray-600 border border-gray-400 px-1 py-0.5 rounded font-black uppercase tracking-wider">Pendente</span>
+                                            </div>
                                         </template>
                                         <template v-else>
                                             <div class="flex flex-1 items-center gap-2 w-full">
-                                                <button @click="removeItem('incomes', inc.id)" class="w-8 h-8 bg-retro-pink border-2 border-retro-dark rounded-lg flex items-center justify-center shrink-0"><i class="fa-solid fa-trash text-xs"></i></button>
-                                                <input v-model="inc.name" type="text" class="w-full bg-white border-2 border-retro-dark rounded-lg p-1.5 text-xs font-black">
-                                                <input v-model.number="inc.amount" type="number" class="w-24 bg-white border-2 border-retro-dark rounded-lg p-1.5 text-xs font-black">
+                                                <button @click="removeItem('incomes', inc.id)" class="w-8 h-8 bg-retro-pink border-2 border-retro-dark rounded-lg flex items-center justify-center shrink-0 shadow-[2px_2px_0px_#292524]"><i class="fa-solid fa-trash text-xs"></i></button>
+                                                <input v-model="inc.name" type="text" class="w-full bg-white border-2 border-retro-dark rounded-lg p-1.5 text-xs font-black outline-none focus:bg-retro-yellow/20">
+                                                <input v-model.number="inc.amount" type="number" class="w-24 bg-white border-2 border-retro-dark rounded-lg p-1.5 text-xs font-black outline-none focus:bg-retro-yellow/20">
                                             </div>
                                         </template>
                                     </div>
                                 </div>
                                 <form v-if="isEditing" @submit.prevent="addItem('incomes')" class="flex gap-2 mt-3 pt-3 border-t-2 border-dashed border-gray-300">
-                                    <input v-model="newItem.name" type="text" placeholder="NOVA ENTRADA" required class="flex-1 border-2 border-retro-dark rounded-lg p-2 text-xs font-black uppercase">
-                                    <input v-model.number="newItem.amount" type="number" step="0.01" placeholder="R$" required class="w-20 border-2 border-retro-dark rounded-lg p-2 text-xs font-black">
-                                    <button type="submit" class="bg-retro-teal border-2 border-retro-dark rounded-lg px-3 shadow-[2px_2px_0px_#292524]"><i class="fa-solid fa-plus text-xs"></i></button>
+                                    <input v-model="newItem.name" type="text" placeholder="NOVA ENTRADA" required class="flex-1 border-2 border-retro-dark rounded-lg p-2 text-xs font-black uppercase outline-none">
+                                    <input v-model.number="newItem.amount" type="number" step="0.01" placeholder="R$" required class="w-20 border-2 border-retro-dark rounded-lg p-2 text-xs font-black outline-none">
+                                    <button type="submit" class="bg-retro-teal border-2 border-retro-dark rounded-lg px-3 shadow-[2px_2px_0px_#292524] active:shadow-none active:translate-y-[2px]"><i class="fa-solid fa-plus text-xs"></i></button>
                                 </form>
                             </section>
 
+                            <!-- SAÍDAS FIXAS -->
                             <section class="bg-white rounded-xl retro-border retro-shadow p-4">
                                 <h4 class="text-xs font-black uppercase border-b-[3px] border-retro-dark pb-2 mb-3 text-retro-pink"><i class="fa-solid fa-arrow-up mr-1"></i> Saídas Fixas</h4>
                                 <div class="space-y-2">
-                                    <div v-for="exp in fixedExpenses" :key="exp.id" class="flex flex-col gap-2 p-2.5 bg-retro-cream retro-border rounded-lg" :class="exp.paid && !isEditing ? 'opacity-60' : ''">
+                                    <div v-for="exp in fixedExpenses" :key="exp.id" class="flex flex-col gap-2 p-2.5 bg-retro-cream retro-border rounded-lg transition-all" :class="exp.paid && !isEditing ? 'opacity-70 bg-gray-100 border-gray-400' : ''">
                                         <div class="flex justify-between items-center w-full">
                                             <template v-if="!isEditing">
                                                 <div class="flex items-center gap-2">
-                                                    <button @click="toggleStatus(exp, 'paid')" class="w-6 h-6 border-2 border-retro-dark rounded bg-white flex items-center justify-center shrink-0">
-                                                        <i v-if="exp.paid" class="fa-solid fa-check text-[10px]"></i>
+                                                    <button @click="toggleStatus(exp, 'paid')" class="w-6 h-6 border-2 border-retro-dark rounded bg-white flex items-center justify-center shrink-0 shadow-[1px_1px_0px_#292524] active:shadow-none active:translate-y-[1px]">
+                                                        <i v-if="exp.paid" class="fa-solid fa-check text-[10px] text-retro-dark"></i>
                                                     </button>
                                                     <div class="flex flex-col">
-                                                        <span class="text-xs font-black uppercase" :class="exp.paid ? 'line-through' : ''">{{ exp.name }}</span>
+                                                        <span class="text-xs font-black uppercase leading-tight" :class="exp.paid ? 'line-through text-gray-500' : ''">{{ exp.name }}</span>
                                                         <div class="flex items-center gap-1 mt-0.5">
-                                                            <span v-if="exp.method === 'credito'" class="text-[8px] font-black uppercase text-retro-pink bg-retro-pink/10 border border-retro-pink px-1 rounded">💳 {{ exp.installments > 1 ? exp.installments + 'x (' + formatCurrency(exp.totalAmount) + ')' : 'Crédito' }}</span>
-                                                            <span v-else class="text-[8px] font-black uppercase text-retro-teal bg-retro-teal/10 border border-retro-teal px-1 rounded">💵 Dinheiro</span>
+                                                            <!-- Mostra o Orçamento associado -->
+                                                            <span class="text-[7px] font-black uppercase text-gray-600 bg-gray-200 border border-gray-400 px-1 rounded">{{ getBudget(exp.budgetId).name }}</span>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <span class="text-xs font-black">{{ formatCurrency(exp.amount) }}</span>
+                                                <div class="flex flex-col items-end gap-1">
+                                                    <span class="text-xs font-black">{{ formatCurrency(exp.amount) }}</span>
+                                                    <!-- Badge Visual Claro -->
+                                                    <span v-if="exp.paid" class="text-[8px] bg-emerald-200 text-emerald-800 border border-emerald-800 px-1 py-0.5 rounded font-black uppercase tracking-wider">Pago</span>
+                                                    <span v-else class="text-[8px] bg-rose-200 text-rose-800 border border-rose-800 px-1 py-0.5 rounded font-black uppercase tracking-wider">Pendente</span>
+                                                </div>
                                             </template>
                                             
                                             <template v-else>
                                                 <div class="flex flex-1 items-start gap-2 w-full">
-                                                    <button @click="removeItem('fixedExpenses', exp.id)" class="w-8 h-8 bg-retro-pink border-2 border-retro-dark rounded-lg flex items-center justify-center shrink-0"><i class="fa-solid fa-trash text-xs"></i></button>
-                                                    <div class="flex-1 flex flex-col sm:flex-row gap-2">
-                                                        <input v-model="exp.name" type="text" class="w-full bg-white border-2 border-retro-dark rounded-lg p-1.5 text-xs font-black">
-                                                        <input v-if="exp.method !== 'credito'" v-model.number="exp.amount" type="number" class="w-full sm:w-24 bg-white border-2 border-retro-dark rounded-lg p-1.5 text-xs font-black">
-                                                        <template v-else>
-                                                            <input v-model.number="exp.totalAmount" @input="exp.amount = (exp.totalAmount || 0) / (exp.installments || 1)" type="number" class="w-full sm:w-24 bg-white border-2 border-retro-dark rounded-lg p-1.5 text-xs font-black" placeholder="Total R$">
-                                                            <select v-model.number="exp.installments" @change="exp.amount = (exp.totalAmount || 0) / (exp.installments || 1)" class="w-16 bg-white border-2 border-retro-dark rounded-lg p-1.5 text-xs font-black appearance-none text-center">
-                                                                <option value="1">1x</option>
-                                                                <option value="2">2x</option><option value="3">3x</option><option value="4">4x</option><option value="5">5x</option>
-                                                                <option value="6">6x</option><option value="10">10x</option><option value="12">12x</option>
-                                                            </select>
-                                                        </template>
+                                                    <button @click="removeItem('fixedExpenses', exp.id)" class="w-8 h-8 bg-retro-pink border-2 border-retro-dark rounded-lg flex items-center justify-center shrink-0 shadow-[2px_2px_0px_#292524]"><i class="fa-solid fa-trash text-xs"></i></button>
+                                                    <div class="flex-1 flex flex-col gap-2">
+                                                        <div class="flex gap-2">
+                                                            <input v-model="exp.name" type="text" class="w-full bg-white border-2 border-retro-dark rounded-lg p-1.5 text-xs font-black outline-none">
+                                                            <input v-model.number="exp.amount" type="number" class="w-24 bg-white border-2 border-retro-dark rounded-lg p-1.5 text-xs font-black outline-none">
+                                                        </div>
+                                                        <!-- Seleção de Categoria na Edição -->
+                                                        <select v-model="exp.budgetId" class="w-full bg-white border-2 border-retro-dark rounded-lg p-1.5 text-xs font-black outline-none">
+                                                            <option v-for="b in budgets" :value="b.id">{{ b.name }}</option>
+                                                        </select>
                                                     </div>
                                                 </div>
                                             </template>
@@ -373,29 +390,22 @@
                                 </div>
 
                                 <form v-if="isEditing" @submit.prevent="addItem('fixedExpenses')" class="flex flex-col gap-2 mt-3 pt-3 border-t-2 border-dashed border-gray-300">
-                                    <div class="flex gap-2">
-                                        <button type="button" @click="newItem.method = 'dinheiro'" class="flex-1 py-1.5 border-2 border-retro-dark rounded-lg text-[9px] font-black uppercase transition-all" :class="newItem.method === 'dinheiro' ? 'bg-retro-teal shadow-[2px_2px_0px_#292524]' : 'bg-gray-100'">💵 Dinheiro</button>
-                                        <button type="button" @click="newItem.method = 'credito'" class="flex-1 py-1.5 border-2 border-retro-dark rounded-lg text-[9px] font-black uppercase transition-all" :class="newItem.method === 'credito' ? 'bg-retro-pink text-white shadow-[2px_2px_0px_#292524]' : 'bg-gray-100'">💳 Crédito</button>
-                                    </div>
                                     <div class="flex flex-col sm:flex-row gap-2">
-                                        <input v-model="newItem.name" type="text" placeholder="NOME DA CONTA" required class="flex-1 border-2 border-retro-dark rounded-lg p-2 text-xs font-black uppercase">
-                                        <div class="flex gap-2 w-full sm:w-auto">
-                                            <input v-model.number="newItem.amount" type="number" step="0.01" :placeholder="newItem.method === 'credito' ? 'TOTAL R$' : 'VALOR R$'" required class="flex-1 sm:w-28 border-2 border-retro-dark rounded-lg p-2 text-xs font-black">
-                                            <select v-if="newItem.method === 'credito'" v-model.number="newItem.installments" class="w-16 border-2 border-retro-dark rounded-lg p-2 text-xs font-black text-center appearance-none cursor-pointer">
-                                                <option value="1">1x</option>
-                                                <option value="2">2x</option><option value="3">3x</option><option value="4">4x</option><option value="5">5x</option>
-                                                <option value="6">6x</option><option value="10">10x</option><option value="12">12x</option>
-                                            </select>
-                                            <button type="submit" class="bg-retro-yellow border-2 border-retro-dark rounded-lg px-3 shadow-[2px_2px_0px_#292524]"><i class="fa-solid fa-plus text-xs"></i></button>
-                                        </div>
+                                        <input v-model="newItem.name" type="text" placeholder="NOME DA CONTA" required class="flex-1 border-2 border-retro-dark rounded-lg p-2 text-xs font-black uppercase outline-none">
+                                        <input v-model.number="newItem.amount" type="number" step="0.01" placeholder="VALOR R$" required class="w-full sm:w-28 border-2 border-retro-dark rounded-lg p-2 text-xs font-black outline-none">
                                     </div>
-                                    <div v-if="newItem.method === 'credito' && newItem.installments > 1 && newItem.amount" class="text-[9px] font-black text-retro-pink text-right bg-retro-pink/10 p-1.5 rounded-lg border-2 border-retro-pink border-dashed mt-1">
-                                        Fatura mensal: {{ newItem.installments }}x de {{ formatCurrency((newItem.amount || 0) / newItem.installments) }}
+                                    <div class="flex gap-2 w-full">
+                                        <!-- Seleção de Categoria ao Criar -->
+                                        <select v-model="newItem.budgetId" class="flex-1 border-2 border-retro-dark rounded-lg p-2 text-xs font-black outline-none appearance-none bg-white">
+                                            <option v-for="b in budgets" :value="b.id">{{ b.name }}</option>
+                                        </select>
+                                        <button type="submit" class="bg-retro-yellow border-2 border-retro-dark rounded-lg px-4 shadow-[2px_2px_0px_#292524] active:shadow-none active:translate-y-[2px] font-black text-xs uppercase"><i class="fa-solid fa-plus mr-1"></i> Add</button>
                                     </div>
                                 </form>
                             </section>
                         </div>
 
+                        <!-- ABA: COFRINHO (Mantida igual) -->
                         <div v-if="activeTab === 'cofrinho'" class="space-y-6 animate-fade-in">
                              <div class="bg-retro-blue p-5 rounded-2xl retro-border retro-shadow">
                                 <h3 class="font-black text-retro-dark text-lg uppercase tracking-tighter"><i class="fa-solid fa-piggy-bank mr-2"></i> Cofrinho</h3>
@@ -428,6 +438,7 @@
                             </div>
                         </div>
 
+                        <!-- ABA: DIÁRIO (Lançamentos) -->
                         <div v-if="activeTab === 'diario'" class="space-y-6 animate-fade-in">
                             <div class="bg-white retro-border retro-shadow rounded-2xl p-5">
                                 <div class="flex justify-between items-center mb-4 border-b-[3px] border-retro-dark pb-3">
@@ -436,20 +447,20 @@
                                     <div class="relative overflow-hidden">
                                         <input type="file" accept="image/*" @change="handleScan" class="absolute inset-0 opacity-0 cursor-pointer z-10" />
                                         <button type="button" class="bg-retro-yellow retro-border shadow-[2px_2px_0px_#292524] active:scale-95 transition-all px-2 py-1 rounded font-black text-[9px] uppercase tracking-widest flex items-center">
-                                            <i class="fa-solid fa-camera mr-1"></i> Scan Inteligente
+                                            <i class="fa-solid fa-camera mr-1"></i> Scan
                                         </button>
                                     </div>
                                 </div>
 
                                 <div v-if="isProcessing" class="mt-4 p-4 bg-retro-cream retro-border rounded-xl flex flex-col items-center mb-4">
                                     <i class="fa-solid fa-spinner fa-spin text-2xl mb-2 text-retro-teal"></i>
-                                    <p class="font-black text-[10px] uppercase tracking-widest text-retro-dark">Analisando nota com IA...</p>
+                                    <p class="font-black text-[10px] uppercase tracking-widest text-retro-dark">Lendo notinha...</p>
                                 </div>
 
                                 <form @submit.prevent="addDailyExpense" class="space-y-3">
                                     <div class="flex gap-2 mb-2">
-                                        <button type="button" @click="newExpense.method = 'dinheiro'" class="flex-1 py-2 rounded-lg border-[2px] border-retro-dark font-black text-[9px] uppercase transition-all" :class="newExpense.method === 'dinheiro' ? 'bg-retro-teal shadow-[2px_2px_0px_#292524]' : 'bg-gray-100 opacity-60'">💵 Dinheiro</button>
-                                        <button type="button" @click="newExpense.method = 'credito'" class="flex-1 py-2 rounded-lg border-[2px] border-retro-dark font-black text-[9px] uppercase transition-all" :class="newExpense.method === 'credito' ? 'bg-retro-pink shadow-[2px_2px_0px_#292524] text-white' : 'bg-gray-100 opacity-60'">💳 Crédito</button>
+                                        <button type="button" @click="newExpense.method = 'dinheiro'" class="flex-1 py-2 rounded-lg border-[2px] border-retro-dark font-black text-[9px] uppercase transition-all" :class="newExpense.method === 'dinheiro' ? 'bg-retro-teal shadow-[2px_2px_0px_#292524]' : 'bg-gray-100 opacity-60'">💵 À Vista/Pix</button>
+                                        <button type="button" @click="newExpense.method = 'credito'" class="flex-1 py-2 rounded-lg border-[2px] border-retro-dark font-black text-[9px] uppercase transition-all" :class="newExpense.method === 'credito' ? 'bg-retro-pink shadow-[2px_2px_0px_#292524] text-white' : 'bg-gray-100 opacity-60'">💳 Crédito (Fatura)</button>
                                     </div>
 
                                     <input v-model="newExpense.name" type="text" placeholder="O QUE FOI? (EX: UBER)" required class="w-full bg-[#fdf8f5] retro-border rounded-xl p-3 text-xs font-black outline-none">
@@ -467,11 +478,11 @@
                                     </div>
                                     
                                     <div v-if="newExpense.method === 'credito' && newExpense.installments > 1 && newExpense.amount" class="text-[10px] font-black text-retro-pink text-right bg-retro-pink/10 p-2 rounded-lg border-2 border-retro-pink border-dashed mt-1">
-                                        Na Fatura: {{ newExpense.installments }}x de {{ formatCurrency((newExpense.amount || 0) / newExpense.installments) }}
+                                        Parcela Mensal: {{ newExpense.installments }}x de {{ formatCurrency((newExpense.amount || 0) / newExpense.installments) }}
                                     </div>
 
                                     <div v-if="scannedItems && scannedItems.length > 0" class="mt-2 bg-[#fdf8f5] retro-border rounded-xl p-3">
-                                        <p class="text-[9px] font-black uppercase tracking-widest mb-2 border-b-2 border-dashed border-retro-dark pb-1">Itens Identificados na Nota</p>
+                                        <p class="text-[9px] font-black uppercase tracking-widest mb-2 border-b-2 border-dashed border-retro-dark pb-1">Itens Identificados</p>
                                         <div class="max-h-28 overflow-y-auto space-y-1 custom-scrollbar">
                                             <div v-for="item in scannedItems" class="flex justify-between text-[9px] font-bold uppercase">
                                                 <span class="truncate pr-2">{{ item.qty }}x {{ item.name }}</span>
@@ -481,15 +492,15 @@
                                     </div>
 
                                     <button type="submit" class="w-full bg-retro-teal retro-border retro-shadow retro-btn font-black p-3 rounded-xl text-xs uppercase mt-2 flex justify-center items-center">
-                                        <i class="fa-solid fa-check mr-2"></i> Guardar Lançamento
+                                        <i class="fa-solid fa-check mr-2"></i> Lançar Gasto
                                     </button>
                                 </form>
                             </div>
 
                             <section>
-                                <h3 class="text-[10px] font-black uppercase tracking-widest bg-white border-2 border-retro-dark inline-block px-2 py-1 rounded-lg mb-3 shadow-[2px_2px_0px_#292524]"><i class="fa-solid fa-clock-rotate-left mr-1.5"></i> Histórico ({{ currentMonthName }})</h3>
+                                <h3 class="text-[10px] font-black uppercase tracking-widest bg-white border-2 border-retro-dark inline-block px-2 py-1 rounded-lg mb-3 shadow-[2px_2px_0px_#292524]"><i class="fa-solid fa-clock-rotate-left mr-1.5"></i> Lançamentos ({{ currentMonthName }})</h3>
                                 <div v-if="filteredDailyExpenses.length === 0" class="text-center py-6 text-gray-500 text-[10px] font-black uppercase border-2 border-dashed border-gray-300 rounded-xl">
-                                    Nenhum registro no mês.
+                                    Nenhum registro lançado neste mês.
                                 </div>
                                 <div class="space-y-2">
                                     <div v-for="expense in filteredDailyExpenses" :key="expense.id" class="bg-white retro-border rounded-xl p-3 flex justify-between items-center shadow-[2px_2px_0px_#292524]">
@@ -506,7 +517,7 @@
                                             <div class="flex flex-col items-end">
                                                 <span class="font-black text-xs bg-retro-yellow border-2 border-retro-dark px-1.5 rounded">{{ formatCurrency(expense.amount) }}</span>
                                                 <span v-if="expense.method === 'credito'" class="text-[7px] font-black uppercase text-retro-pink mt-1 bg-retro-pink/10 border border-retro-pink px-1 rounded">💳 {{ expense.installments }}x ({{ formatCurrency(expense.totalAmount) }})</span>
-                                                <span v-else class="text-[7px] font-black uppercase text-retro-teal mt-1 bg-retro-teal/10 border border-retro-teal px-1 rounded">💵 Dinheiro</span>
+                                                <span v-else class="text-[7px] font-black uppercase text-retro-teal mt-1 bg-retro-teal/10 border border-retro-teal px-1 rounded">💵 À Vista</span>
                                             </div>
                                             <button @click="removeItem('dailyExpenses', expense.id)" class="bg-retro-pink border-2 border-retro-dark w-7 h-7 rounded-lg flex items-center justify-center text-white"><i class="fa-solid fa-trash-can text-[10px]"></i></button>
                                         </div>
@@ -571,10 +582,12 @@
         const apiKey = ""; 
 
         const defaultData = {
-            settings: { creditLimit: 2000 },
+            settings: { creditLimit: 2000, faturasPagas: {} }, // Guardar status das faturas pagas (Ex: "2023-10": true)
             incomes: [{ id: 1, name: 'Salário', amount: 1421, received: false }],
-            fixedExpenses: [{ id: 2, name: 'Aluguel', amount: 350, method: 'dinheiro', installments: 1, totalAmount: 350, paid: false }],
+            // Adicionado budgetId nas saídas fixas
+            fixedExpenses: [{ id: 2, name: 'Aluguel', amount: 350, budgetId: 'moradia', paid: false }],
             budgets: [
+                { id: 'moradia', name: 'Moradia', limit: 800, icon: 'fa-solid fa-house', color: 'bg-retro-teal' },
                 { id: 'mercado', name: 'Supermercado', limit: 600, icon: 'fa-solid fa-basket-shopping', color: 'bg-retro-orange' },
                 { id: 'lazer', name: 'Lazer', limit: 200, icon: 'fa-solid fa-ice-cream', color: 'bg-retro-pink' },
                 { id: 'transporte', name: 'Transporte', limit: 150, icon: 'fa-solid fa-car', color: 'bg-retro-blue' }
@@ -595,12 +608,12 @@
                 const showSplash = ref(true);
                 const hideSplashAnimation = ref(false);
 
-                // Variáveis de Mês/Calendário
+                // Calendário
                 const currentMonth = ref(new Date().getMonth());
                 const currentYear = ref(new Date().getFullYear());
                 const monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
                 
-                const settings = ref({ creditLimit: 2000 });
+                const settings = ref({ creditLimit: 2000, faturasPagas: {} });
                 const activeTab = ref('resumo');
                 const incomes = ref([]);
                 const fixedExpenses = ref([]);
@@ -610,10 +623,10 @@
                 
                 const isEditing = ref(false);
                 const isEditingBudgets = ref(false);
-                const isProcessing = ref(false); // Scanner IA
-                const scannedItems = ref([]); // Itens Scanner
+                const isProcessing = ref(false);
+                const scannedItems = ref([]);
                 
-                const newItem = ref({ name: '', amount: '', method: 'dinheiro', installments: 1 });
+                const newItem = ref({ name: '', amount: '', budgetId: 'moradia' });
                 const newBudget = ref({ name: '', limit: '' });
                 const newExpense = ref({ name: '', amount: '', budgetId: 'mercado', method: 'dinheiro', installments: 1, items: [] });
                 const newGoal = ref({ name: '', target: '' });
@@ -652,9 +665,13 @@
                     const docSnap = await getDoc(doc(db, 'users', uid));
                     if (docSnap.exists()) {
                         const data = docSnap.data();
-                        settings.value = data.settings || { creditLimit: 2000 };
+                        settings.value = data.settings || { creditLimit: 2000, faturasPagas: {} };
+                        if (!settings.value.faturasPagas) settings.value.faturasPagas = {}; // Garantir que existe
                         incomes.value = data.incomes || [];
-                        fixedExpenses.value = data.fixedExpenses || [];
+                        fixedExpenses.value = (data.fixedExpenses || []).map(e => ({
+                            ...e,
+                            budgetId: e.budgetId || 'moradia' // Migração para dados antigos
+                        }));
                         budgets.value = data.budgets || defaultData.budgets;
                         dailyExpenses.value = (data.dailyExpenses || []).map(e => ({
                             ...e,
@@ -683,7 +700,6 @@
                     if(!authLoading.value && user.value) saveUserData();
                 }, { deep: true });
 
-                // Analytics & Calendário Logic
                 const currentMonthName = computed(() => monthNames[currentMonth.value]);
                 const changeMonth = (dir) => {
                     let d = new Date(currentYear.value, currentMonth.value + dir, 1);
@@ -698,53 +714,95 @@
                     });
                 });
 
-                const daysInMonth = computed(() => new Date(currentYear.value, currentMonth.value + 1, 0).getDate());
-                const emptyDaysStart = computed(() => new Date(currentYear.value, currentMonth.value, 1).getDay());
+                // ==========================================
+                // LÓGICA DE SIMULAÇÃO DE FATURA DE CARTÃO
+                // ==========================================
                 
-                const calendarDays = computed(() => {
-                    const days = [];
-                    for(let i=1; i<=daysInMonth.value; i++) {
-                        const dayTotal = filteredDailyExpenses.value
-                            .filter(e => new Date(e.timestamp).getDate() === i)
-                            .reduce((sum, e) => sum + e.amount, 0);
-                        days.push({ day: i, total: dayTotal });
-                    }
-                    return days;
+                // Calcula as parcelas de meses anteriores que caem neste mês atual selecionado
+                const faturaDesteMes = computed(() => {
+                    let totalFatura = 0;
+                    const targetMonth = currentMonth.value;
+                    const targetYear = currentYear.value;
+
+                    dailyExpenses.value.forEach(exp => {
+                        if (exp.method === 'credito') {
+                            const expDate = new Date(exp.timestamp);
+                            const expMonth = expDate.getMonth();
+                            const expYear = expDate.getFullYear();
+
+                            // Quantos meses se passaram desde a compra?
+                            // Ex: Comprou em Jan(0), estamos em Fev(1) -> 1 mês de diferença.
+                            // Para cartão de crédito, geralmente se paga no mês seguinte. 
+                            // Assumindo que mês 1 = Parcela 1, mês 2 = Parcela 2, etc.
+                            const monthsDifference = (targetYear - expYear) * 12 + (targetMonth - expMonth);
+
+                            // Se a diferença de meses for maior que 0 (ou seja, é um mês futuro em relação à compra)
+                            // e for menor ou igual à quantidade de parcelas, então cai nesta fatura.
+                            if (monthsDifference > 0 && monthsDifference <= exp.installments) {
+                                // O exp.amount já guarda o valor de 1 parcela (total / num parcelas)
+                                totalFatura += exp.amount;
+                            }
+                        }
+                    });
+                    return totalFatura;
                 });
 
-                const getHeatClass = (total) => {
-                    if(total === 0) return 'heat-0 opacity-40';
-                    if(total < 50) return 'heat-1';
-                    if(total < 150) return 'heat-2';
-                    return 'heat-3 text-white';
+                // Chave única para o mês atual para salvar no BD se a fatura foi paga (Ex: "2023-10")
+                const faturaKey = computed(() => `${currentYear.value}-${currentMonth.value}`);
+                
+                const isFaturaPaga = computed(() => {
+                    return !!settings.value.faturasPagas[faturaKey.value];
+                });
+
+                const toggleFaturaPaga = () => {
+                    if (isFaturaPaga.value) {
+                        delete settings.value.faturasPagas[faturaKey.value];
+                    } else {
+                        settings.value.faturasPagas[faturaKey.value] = true;
+                    }
                 };
 
-                // Lógicas Complexas Originais (Crédito, Dinheiro, Fatura)
+                // Lógicas de Saldo Atualizadas
                 const dailyCash = computed(() => filteredDailyExpenses.value.filter(e => e.method !== 'credito').reduce((a, c) => a + c.amount, 0));
-                const fixedCash = computed(() => fixedExpenses.value.filter(e => e.method !== 'credito').reduce((a, c) => a + c.amount, 0));
                 
-                const dailyCredit = computed(() => filteredDailyExpenses.value.filter(e => e.method === 'credito').reduce((a, c) => a + c.amount, 0));
-                const dailyCreditTotal = computed(() => filteredDailyExpenses.value.filter(e => e.method === 'credito').reduce((a, c) => a + (c.totalAmount || c.amount), 0));
-                const fixedCredit = computed(() => fixedExpenses.value.filter(e => e.method === 'credito').reduce((a, c) => a + c.amount, 0));
-                const fixedCreditTotal = computed(() => fixedExpenses.value.filter(e => e.method === 'credito').reduce((a, c) => a + (c.totalAmount || c.amount), 0));
-
-                const creditPurchasesThisMonth = computed(() => dailyCredit.value + fixedCredit.value);
-                const totalCreditUsed = computed(() => dailyCreditTotal.value + fixedCreditTotal.value); 
-                const availableCredit = computed(() => settings.value.creditLimit - totalCreditUsed.value);
+                // Agora Contas fixas não têm método de crédito. Todas são descontadas.
+                const totalFixedCash = computed(() => fixedExpenses.value.reduce((a, c) => a + c.amount, 0));
+                
+                // Crédito gasto NO MÊS (para abater do limite do cartão)
+                const totalCreditUsedThisMonth = computed(() => filteredDailyExpenses.value.filter(e => e.method === 'credito').reduce((a, c) => a + (c.totalAmount || c.amount), 0));
+                
+                // O limite disponível no cartão (apenas simulado para o mês atual, não acumula de forma complexa)
+                const availableCredit = computed(() => settings.value.creditLimit - totalCreditUsedThisMonth.value);
 
                 const totalIncome = computed(() => incomes.value.reduce((a, c) => a + c.amount, 0));
-                const totalFixed = computed(() => fixedCash.value + fixedCredit.value); 
                 const totalSaved = computed(() => savings.value.reduce((a, c) => a + c.amount, 0));
-                const balance = computed(() => totalIncome.value - fixedCash.value - dailyCash.value - creditPurchasesThisMonth.value - totalSaved.value);
+                
+                // O saldo real em dinheiro deduz:
+                // Receitas - Gastos Fixos - Lançamentos em Dinheiro - Fatura deste mês (se já marcou como paga, já saiu da conta, ou se quiser considerar como provisão)
+                // Vamos deduzir a Fatura se ela já estiver constando, para o saldo refletir o dinheiro real após obrigações.
+                const balance = computed(() => {
+                    let b = totalIncome.value - totalFixedCash.value - dailyCash.value - totalSaved.value;
+                    // Se a fatura desse mês estiver marcada como paga, o dinheiro "já saiu" do bolso.
+                    // (Na verdade, pra projetar melhor, deduzimos a fatura do saldo livre)
+                    b -= faturaDesteMes.value;
+                    return b;
+                });
 
-                const totalBudgetLimit = computed(() => budgets.value.reduce((a, b) => a + Number(b.limit), 0));
-                const availableForBudgets = computed(() => totalIncome.value - totalFixed.value - totalSaved.value);
+                const availableForBudgets = computed(() => totalIncome.value - totalFixedCash.value - totalSaved.value - faturaDesteMes.value);
 
                 const formatCurrency = (val) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val || 0);
                 
-                const getBudgetSpent = (id) => filteredDailyExpenses.value.filter(e => e.budgetId === id).reduce((a, c) => a + c.amount, 0);
+                // Gasto de Orçamento AGORA SOMA diário E fixo
+                const getBudgetSpent = (id) => {
+                    // Soma lançamentos do dia a dia
+                    let spent = filteredDailyExpenses.value.filter(e => e.budgetId === id).reduce((a, c) => a + c.amount, 0);
+                    // Soma as contas fixas cadastradas nesse orçamento
+                    spent += fixedExpenses.value.filter(e => e.budgetId === id).reduce((a, c) => a + c.amount, 0);
+                    return spent;
+                };
+
                 const getBudgetPercentage = (id) => (getBudgetSpent(id) / (budgets.value.find(b => b.id === id)?.limit || 1)) * 100;
-                const getBudget = (id) => budgets.value.find(b => b.id === id) || budgets.value[0];
+                const getBudget = (id) => budgets.value.find(b => b.id === id) || budgets.value[0] || { name: 'Geral', icon: 'fa-solid fa-tag', color: 'bg-gray-200' };
                 
                 const toggleStatus = (item, field) => { item[field] = !item[field]; };
                 const editCreditLimit = () => {
@@ -756,7 +814,7 @@
                 const confirmModalAction = () => { if(modalData.value.action) modalData.value.action(); showModal.value = false; };
                 
                 const confirmReset = () => {
-                    openModal('Novo Mês?', 'Isso limpará o status das contas fixas. Seus dados antigos de gastos continuam salvos no mês anterior.', () => {
+                    openModal('Novo Mês?', 'Isso limpará os status de "PAGO/RECEBIDO" das suas contas fixas e entradas, para começar um novo ciclo mensal.', () => {
                         incomes.value.forEach(i => i.received = false);
                         fixedExpenses.value.forEach(e => e.paid = false);
                         currentMonth.value = new Date().getMonth();
@@ -781,15 +839,14 @@
                     if(!newItem.value.name) return;
 
                     let itemAmount = parseFloat(newItem.value.amount) || 0;
-                    let totalVal = itemAmount;
-                    let parcelVal = itemAmount;
-                    let numInstallments = newItem.value.installments || 1;
 
-                    if (newItem.value.method === 'credito') parcelVal = totalVal / numInstallments;
-
-                    if(list === 'incomes') incomes.value.push({ id: Date.now(), name: newItem.value.name, amount: totalVal, received: false });
-                    if(list === 'fixedExpenses') fixedExpenses.value.push({ id: Date.now(), name: newItem.value.name, amount: parcelVal, totalAmount: totalVal, method: newItem.value.method || 'dinheiro', installments: numInstallments, paid: false });
-                    newItem.value = { name: '', amount: '', method: 'dinheiro', installments: 1 };
+                    if(list === 'incomes') incomes.value.push({ id: Date.now(), name: newItem.value.name, amount: itemAmount, received: false });
+                    if(list === 'fixedExpenses') {
+                        // Usa o budgetId selecionado, se não tiver cai pro primeiro
+                        const bId = newItem.value.budgetId || budgets.value[0]?.id || 'moradia';
+                        fixedExpenses.value.push({ id: Date.now(), name: newItem.value.name, amount: itemAmount, budgetId: bId, paid: false });
+                    }
+                    newItem.value = { name: '', amount: '', budgetId: budgets.value[0]?.id || 'moradia' };
                 };
 
                 const addDailyExpense = () => {
@@ -811,7 +868,7 @@
                     scannedItems.value = [];
                 };
 
-                // IA Scanner Função Original Restaurada
+                // IA Scanner Função Original
                 const handleScan = async (e) => {
                     const file = e.target.files[0];
                     if (!file) return;
@@ -872,10 +929,10 @@
                     user, authLoading, loading, isLogin, email, password, authError, handleAuth, logout, toggleAuthMode, showSplash, hideSplashAnimation,
                     activeTab, incomes, fixedExpenses, budgets, dailyExpenses, filteredDailyExpenses, savings, isEditing, isEditingBudgets, isProcessing, scannedItems,
                     newItem, newBudget, newExpense, newGoal, depositAmounts,
-                    totalIncome, totalFixed, totalSaved, balance, availableForBudgets, creditPurchasesThisMonth, availableCredit,
+                    totalIncome, totalFixedCash, totalSaved, balance, availableForBudgets, availableCredit, faturaDesteMes, isFaturaPaga, toggleFaturaPaga,
                     editCreditLimit, formatCurrency, getBudgetSpent, getBudgetPercentage, getBudget, toggleStatus, removeItem, addItem, addDailyExpense, handleScan, createGoal, removeGoal, depositMoney,
                     showModal, modalData, confirmReset, confirmModalAction,
-                    currentMonthName, currentYear, changeMonth, calendarDays, emptyDaysStart, getHeatClass
+                    currentMonthName, currentYear, changeMonth
                 };
             }
         }).mount('#app');
