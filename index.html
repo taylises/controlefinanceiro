@@ -59,6 +59,14 @@
             100% { opacity: 0; transform: scale(1.1); pointer-events: none; visibility: hidden; }
         }
         
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-pop-in { animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes spinSlow { 100% { transform: rotate(360deg); } }
+        .animate-spin-slow { animation: spinSlow 4s linear infinite; }
+
         /* Heatmap para o calendário */
         .heat-0 { background-color: #fef3c7; }
         .heat-1 { background-color: #fcd34d; }
@@ -573,9 +581,9 @@
                     </button>
                 </nav>
 
-                <div v-if="showModal" class="absolute inset-0 bg-retro-dark/80 z-[100] flex items-center justify-center p-4">
-                    <div class="bg-retro-cream retro-border rounded-xl p-5 max-w-xs w-full retro-shadow-lg text-center relative overflow-hidden">
-                        <!-- Efeito de celebração para popups de info (como fatura paga) -->
+                <div v-if="showModal" class="absolute inset-0 bg-retro-dark/80 z-[100] flex items-center justify-center p-4 backdrop-blur-sm">
+                    <!-- Modal Padrão / Confirm / Info -->
+                    <div v-if="!modalData.isCelebration" class="bg-retro-cream retro-border rounded-xl p-5 max-w-xs w-full retro-shadow-lg text-center relative overflow-hidden animate-pop-in">
                         <div v-if="modalData.isInfo" class="absolute -top-4 -left-4 w-16 h-16 bg-retro-pink rounded-full mix-blend-multiply opacity-50"></div>
                         <div v-if="modalData.isInfo" class="absolute -bottom-4 -right-4 w-20 h-20 bg-retro-teal rounded-full mix-blend-multiply opacity-50"></div>
                         
@@ -586,6 +594,32 @@
                             <button v-if="modalData.action" @click="confirmModalAction" class="w-full bg-retro-pink retro-border retro-btn font-black p-2 rounded text-[10px] uppercase">Confirmar</button>
                             <button @click="showModal = false" class="w-full retro-border retro-btn font-black p-2 rounded text-[10px] uppercase" :class="modalData.isInfo ? 'bg-retro-teal text-white' : 'bg-white text-retro-dark'">{{ modalData.isInfo ? 'Maravilha!' : 'Cancelar' }}</button>
                         </div>
+                    </div>
+
+                    <!-- Modal Celebração Especial (A Estrelinha Brilhante) -->
+                    <div v-else class="bg-retro-yellow border-[4px] border-retro-dark rounded-3xl p-6 max-w-xs w-full shadow-[8px_8px_0px_#292524] text-center relative overflow-hidden animate-pop-in">
+                        <!-- Background Shapes Rodando -->
+                        <i class="fa-solid fa-certificate absolute -top-10 -right-10 text-8xl text-white opacity-40 animate-spin-slow"></i>
+                        <i class="fa-solid fa-star absolute -bottom-6 -left-6 text-7xl text-retro-pink opacity-40 animate-spin-slow" style="animation-direction: reverse;"></i>
+
+                        <!-- Ícone Gigante Central -->
+                        <div class="relative z-10 mb-4 mt-2">
+                            <div class="absolute inset-0 bg-white rounded-full animate-ping opacity-50 scale-150"></div>
+                            <i class="fa-solid fa-star text-7xl text-retro-teal drop-shadow-[4px_4px_0px_#292524] relative z-10 animate-bounce"></i>
+                        </div>
+
+                        <!-- Título Gigante -->
+                        <h3 class="text-4xl font-black uppercase mb-3 text-retro-dark tracking-tighter leading-none relative z-10" style="text-shadow: 2px 2px 0px white;">{{ modalData.title }}</h3>
+                        
+                        <!-- Mensagem -->
+                        <p class="text-[11px] leading-tight font-black text-retro-dark bg-white border-[3px] border-retro-dark rounded-xl p-3 mb-5 relative z-10 retro-shadow">
+                            {{ modalData.message }}
+                        </p>
+                        
+                        <!-- Botão -->
+                        <button @click="showModal = false" class="w-full bg-retro-pink text-white retro-border retro-shadow retro-btn font-black p-3 rounded-xl text-xs uppercase tracking-widest relative z-10">
+                            Top! 🚀
+                        </button>
                     </div>
                 </div>
 
@@ -665,7 +699,7 @@
                 const depositAmounts = ref({});
 
                 const showModal = ref(false);
-                const modalData = ref({ title: '', message: '', action: null, isInfo: false });
+                const modalData = ref({ title: '', message: '', action: null, isInfo: false, isCelebration: false });
 
                 onMounted(() => {
                     setTimeout(() => { hideSplashAnimation.value = true; setTimeout(() => { showSplash.value = false; }, 500); }, 1500);
@@ -809,8 +843,8 @@
                         delete settings.value.faturasPagas[faturaKey.value];
                     } else {
                         settings.value.faturasPagas[faturaKey.value] = true;
-                        // Celebração da liberação de limite!
-                        openModal('🎉 Uhuuu!', 'Você pagou sua fatura deste mês. Seu limite foi liberado com sucesso para você usar de novo!', null, true);
+                        // Aciona a Celebração Gigante e Brilhante!
+                        openModal('UHUUU!', 'Sua Fatura foi paga e o limite do cartão tá liberado pra usar de novo!', null, false, true);
                     }
                 };
 
@@ -884,9 +918,9 @@
                     if(novo && !isNaN(novo)) settings.value.creditLimit = parseFloat(novo);
                 };
 
-                // Atualizado para suportar modal de "informação" sem botão de cancelar
-                const openModal = (title, message, action = null, isInfo = false) => { 
-                    modalData.value = { title, message, action, isInfo }; 
+                // Atualizado para suportar modal de Celebração
+                const openModal = (title, message, action = null, isInfo = false, isCelebration = false) => { 
+                    modalData.value = { title, message, action, isInfo, isCelebration }; 
                     showModal.value = true; 
                 };
                 
