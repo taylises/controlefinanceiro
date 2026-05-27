@@ -284,13 +284,11 @@
 
                             <!-- FATURA DO CARTÃO (Cálculo Automático) -->
                             <section class="bg-retro-dark text-white rounded-xl retro-border retro-shadow p-4 relative overflow-hidden">
-                                <!-- Efeito visual listrado no fundo -->
                                 <div class="absolute inset-0 opacity-[0.05]" style="background-image: repeating-linear-gradient(45deg, #fff, #fff 10px, transparent 10px, transparent 20px);"></div>
                                 
                                 <div class="relative z-10 flex justify-between items-center mb-3 border-b-2 border-white/20 pb-2">
                                     <h4 class="text-xs font-black uppercase text-retro-yellow"><i class="fa-regular fa-credit-card mr-1"></i> Fatura do Mês</h4>
                                     
-                                    <!-- Botão para pagar a fatura do mês atual -->
                                     <button @click="toggleFaturaPaga" class="text-[9px] font-black uppercase px-2 py-1 rounded border-2 transition-all" 
                                             :class="isFaturaPaga ? 'bg-retro-teal text-retro-dark border-retro-teal' : 'bg-transparent text-white border-white hover:bg-white/10'">
                                         <i :class="isFaturaPaga ? 'fa-solid fa-check mr-1' : 'fa-regular fa-square mr-1'"></i> 
@@ -303,7 +301,7 @@
                                         <p class="text-2xl font-black" :class="isFaturaPaga ? 'line-through text-gray-400' : 'text-retro-cream'">{{ formatCurrency(faturaDesteMes) }}</p>
                                     </div>
                                     <div class="text-right">
-                                        <p class="text-[8px] text-gray-400 font-bold max-w-[120px]">Soma de parcelas e gastos no crédito lançados em meses anteriores.</p>
+                                        <p class="text-[8px] text-gray-400 font-bold max-w-[120px]">Soma de parcelas diárias e contas fixas pagas no crédito.</p>
                                     </div>
                                 </div>
                             </section>
@@ -322,7 +320,6 @@
                                             </div>
                                             <div class="flex items-center gap-2">
                                                 <span class="text-xs font-black">{{ formatCurrency(inc.amount) }}</span>
-                                                <!-- Badge Visual Claro -->
                                                 <span v-if="inc.received" class="text-[8px] bg-emerald-200 text-emerald-800 border border-emerald-800 px-1 py-0.5 rounded font-black uppercase tracking-wider">Recebido</span>
                                                 <span v-else class="text-[8px] bg-gray-200 text-gray-600 border border-gray-400 px-1 py-0.5 rounded font-black uppercase tracking-wider">Pendente</span>
                                             </div>
@@ -357,14 +354,15 @@
                                                     <div class="flex flex-col">
                                                         <span class="text-xs font-black uppercase leading-tight" :class="exp.paid ? 'line-through text-gray-500' : ''">{{ exp.name }}</span>
                                                         <div class="flex items-center gap-1 mt-0.5">
-                                                            <!-- Mostra o Orçamento associado -->
                                                             <span class="text-[7px] font-black uppercase text-gray-600 bg-gray-200 border border-gray-400 px-1 rounded">{{ getBudget(exp.budgetId).name }}</span>
+                                                            <!-- Mostra o método de pagamento -->
+                                                            <span v-if="exp.method === 'credito'" class="text-[7px] font-black uppercase text-retro-pink bg-retro-pink/10 border border-retro-pink px-1 rounded">💳 Fatura</span>
+                                                            <span v-else class="text-[7px] font-black uppercase text-retro-teal bg-retro-teal/10 border border-retro-teal px-1 rounded">💵 À Vista</span>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="flex flex-col items-end gap-1">
                                                     <span class="text-xs font-black">{{ formatCurrency(exp.amount) }}</span>
-                                                    <!-- Badge Visual Claro -->
                                                     <span v-if="exp.paid" class="text-[8px] bg-emerald-200 text-emerald-800 border border-emerald-800 px-1 py-0.5 rounded font-black uppercase tracking-wider">Pago</span>
                                                     <span v-else class="text-[8px] bg-rose-200 text-rose-800 border border-rose-800 px-1 py-0.5 rounded font-black uppercase tracking-wider">Pendente</span>
                                                 </div>
@@ -378,10 +376,16 @@
                                                             <input v-model="exp.name" type="text" class="w-full bg-white border-2 border-retro-dark rounded-lg p-1.5 text-xs font-black outline-none">
                                                             <input v-model.number="exp.amount" type="number" class="w-24 bg-white border-2 border-retro-dark rounded-lg p-1.5 text-xs font-black outline-none">
                                                         </div>
-                                                        <!-- Seleção de Categoria na Edição -->
-                                                        <select v-model="exp.budgetId" class="w-full bg-white border-2 border-retro-dark rounded-lg p-1.5 text-xs font-black outline-none">
-                                                            <option v-for="b in budgets" :value="b.id">{{ b.name }}</option>
-                                                        </select>
+                                                        <!-- Seleção de Categoria e Método na Edição -->
+                                                        <div class="flex gap-2 w-full">
+                                                            <select v-model="exp.budgetId" class="flex-1 bg-white border-2 border-retro-dark rounded-lg p-1.5 text-[10px] font-black outline-none appearance-none">
+                                                                <option v-for="b in budgets" :value="b.id">{{ b.name }}</option>
+                                                            </select>
+                                                            <select v-model="exp.method" class="flex-1 bg-white border-2 border-retro-dark rounded-lg p-1.5 text-[10px] font-black outline-none appearance-none">
+                                                                <option value="dinheiro">💵 À Vista</option>
+                                                                <option value="credito">💳 Fatura</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </template>
@@ -395,11 +399,15 @@
                                         <input v-model.number="newItem.amount" type="number" step="0.01" placeholder="VALOR R$" required class="w-full sm:w-28 border-2 border-retro-dark rounded-lg p-2 text-xs font-black outline-none">
                                     </div>
                                     <div class="flex gap-2 w-full">
-                                        <!-- Seleção de Categoria ao Criar -->
-                                        <select v-model="newItem.budgetId" class="flex-1 border-2 border-retro-dark rounded-lg p-2 text-xs font-black outline-none appearance-none bg-white">
+                                        <!-- Seleção de Categoria e Método ao Criar -->
+                                        <select v-model="newItem.budgetId" class="flex-1 border-2 border-retro-dark rounded-lg p-2 text-[10px] font-black outline-none appearance-none bg-white">
                                             <option v-for="b in budgets" :value="b.id">{{ b.name }}</option>
                                         </select>
-                                        <button type="submit" class="bg-retro-yellow border-2 border-retro-dark rounded-lg px-4 shadow-[2px_2px_0px_#292524] active:shadow-none active:translate-y-[2px] font-black text-xs uppercase"><i class="fa-solid fa-plus mr-1"></i> Add</button>
+                                        <select v-model="newItem.method" class="flex-1 border-2 border-retro-dark rounded-lg p-2 text-[10px] font-black outline-none appearance-none bg-white">
+                                            <option value="dinheiro">💵 À Vista</option>
+                                            <option value="credito">💳 Fatura</option>
+                                        </select>
+                                        <button type="submit" class="bg-retro-yellow border-2 border-retro-dark rounded-lg px-3 shadow-[2px_2px_0px_#292524] active:shadow-none active:translate-y-[2px] font-black text-[10px] uppercase"><i class="fa-solid fa-plus"></i></button>
                                     </div>
                                 </form>
                             </section>
@@ -578,14 +586,13 @@
         const auth = getAuth(firebaseApp);
         const db = getFirestore(firebaseApp);
 
-        // Chave do Gemini Restaurada
         const apiKey = ""; 
 
         const defaultData = {
             settings: { creditLimit: 2000, faturasPagas: {} }, // Guardar status das faturas pagas (Ex: "2023-10": true)
             incomes: [{ id: 1, name: 'Salário', amount: 1421, received: false }],
-            // Adicionado budgetId nas saídas fixas
-            fixedExpenses: [{ id: 2, name: 'Aluguel', amount: 350, budgetId: 'moradia', paid: false }],
+            // Adicionado budgetId e method nas saídas fixas
+            fixedExpenses: [{ id: 2, name: 'Aluguel', amount: 350, budgetId: 'moradia', method: 'dinheiro', paid: false }],
             budgets: [
                 { id: 'moradia', name: 'Moradia', limit: 800, icon: 'fa-solid fa-house', color: 'bg-retro-teal' },
                 { id: 'mercado', name: 'Supermercado', limit: 600, icon: 'fa-solid fa-basket-shopping', color: 'bg-retro-orange' },
@@ -626,7 +633,7 @@
                 const isProcessing = ref(false);
                 const scannedItems = ref([]);
                 
-                const newItem = ref({ name: '', amount: '', budgetId: 'moradia' });
+                const newItem = ref({ name: '', amount: '', budgetId: 'moradia', method: 'dinheiro' });
                 const newBudget = ref({ name: '', limit: '' });
                 const newExpense = ref({ name: '', amount: '', budgetId: 'mercado', method: 'dinheiro', installments: 1, items: [] });
                 const newGoal = ref({ name: '', target: '' });
@@ -666,11 +673,12 @@
                     if (docSnap.exists()) {
                         const data = docSnap.data();
                         settings.value = data.settings || { creditLimit: 2000, faturasPagas: {} };
-                        if (!settings.value.faturasPagas) settings.value.faturasPagas = {}; // Garantir que existe
+                        if (!settings.value.faturasPagas) settings.value.faturasPagas = {};
                         incomes.value = data.incomes || [];
                         fixedExpenses.value = (data.fixedExpenses || []).map(e => ({
                             ...e,
-                            budgetId: e.budgetId || 'moradia' // Migração para dados antigos
+                            budgetId: e.budgetId || 'moradia', // Migração para dados antigos
+                            method: e.method || 'dinheiro'     // Migração para dados antigos
                         }));
                         budgets.value = data.budgets || defaultData.budgets;
                         dailyExpenses.value = (data.dailyExpenses || []).map(e => ({
@@ -719,31 +727,34 @@
                 // ==========================================
                 
                 // Calcula as parcelas de meses anteriores que caem neste mês atual selecionado
+                // E soma as contas fixas marcadas como crédito
                 const faturaDesteMes = computed(() => {
                     let totalFatura = 0;
                     const targetMonth = currentMonth.value;
                     const targetYear = currentYear.value;
 
+                    // 1. Soma Lançamentos (Diários)
                     dailyExpenses.value.forEach(exp => {
                         if (exp.method === 'credito') {
                             const expDate = new Date(exp.timestamp);
                             const expMonth = expDate.getMonth();
                             const expYear = expDate.getFullYear();
 
-                            // Quantos meses se passaram desde a compra?
-                            // Ex: Comprou em Jan(0), estamos em Fev(1) -> 1 mês de diferença.
-                            // Para cartão de crédito, geralmente se paga no mês seguinte. 
-                            // Assumindo que mês 1 = Parcela 1, mês 2 = Parcela 2, etc.
                             const monthsDifference = (targetYear - expYear) * 12 + (targetMonth - expMonth);
 
-                            // Se a diferença de meses for maior que 0 (ou seja, é um mês futuro em relação à compra)
-                            // e for menor ou igual à quantidade de parcelas, então cai nesta fatura.
                             if (monthsDifference > 0 && monthsDifference <= exp.installments) {
-                                // O exp.amount já guarda o valor de 1 parcela (total / num parcelas)
                                 totalFatura += exp.amount;
                             }
                         }
                     });
+
+                    // 2. Soma Contas Fixas marcadas como Crédito
+                    fixedExpenses.value.forEach(exp => {
+                        if (exp.method === 'credito') {
+                            totalFatura += exp.amount;
+                        }
+                    });
+                    
                     return totalFatura;
                 });
 
@@ -765,25 +776,26 @@
                 // Lógicas de Saldo Atualizadas
                 const dailyCash = computed(() => filteredDailyExpenses.value.filter(e => e.method !== 'credito').reduce((a, c) => a + c.amount, 0));
                 
-                // Agora Contas fixas não têm método de crédito. Todas são descontadas.
-                const totalFixedCash = computed(() => fixedExpenses.value.reduce((a, c) => a + c.amount, 0));
+                // Contas fixas pagas APENAS em dinheiro deduzem do Saldo Principal (o restante cai na Fatura)
+                const totalFixedCash = computed(() => fixedExpenses.value.filter(e => e.method !== 'credito').reduce((a, c) => a + c.amount, 0));
                 
                 // Crédito gasto NO MÊS (para abater do limite do cartão)
-                const totalCreditUsedThisMonth = computed(() => filteredDailyExpenses.value.filter(e => e.method === 'credito').reduce((a, c) => a + (c.totalAmount || c.amount), 0));
+                const totalCreditUsedThisMonth = computed(() => {
+                    let used = filteredDailyExpenses.value.filter(e => e.method === 'credito').reduce((a, c) => a + (c.totalAmount || c.amount), 0);
+                    used += fixedExpenses.value.filter(e => e.method === 'credito').reduce((a, c) => a + c.amount, 0);
+                    return used;
+                });
                 
-                // O limite disponível no cartão (apenas simulado para o mês atual, não acumula de forma complexa)
+                // O limite disponível no cartão (apenas simulado para o mês atual)
                 const availableCredit = computed(() => settings.value.creditLimit - totalCreditUsedThisMonth.value);
 
                 const totalIncome = computed(() => incomes.value.reduce((a, c) => a + c.amount, 0));
                 const totalSaved = computed(() => savings.value.reduce((a, c) => a + c.amount, 0));
                 
                 // O saldo real em dinheiro deduz:
-                // Receitas - Gastos Fixos - Lançamentos em Dinheiro - Fatura deste mês (se já marcou como paga, já saiu da conta, ou se quiser considerar como provisão)
-                // Vamos deduzir a Fatura se ela já estiver constando, para o saldo refletir o dinheiro real após obrigações.
+                // Receitas - Gastos Fixos em Dinheiro - Lançamentos em Dinheiro - Fatura Deste Mês
                 const balance = computed(() => {
                     let b = totalIncome.value - totalFixedCash.value - dailyCash.value - totalSaved.value;
-                    // Se a fatura desse mês estiver marcada como paga, o dinheiro "já saiu" do bolso.
-                    // (Na verdade, pra projetar melhor, deduzimos a fatura do saldo livre)
                     b -= faturaDesteMes.value;
                     return b;
                 });
@@ -792,11 +804,9 @@
 
                 const formatCurrency = (val) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val || 0);
                 
-                // Gasto de Orçamento AGORA SOMA diário E fixo
+                // Gasto de Orçamento SOMA diário E fixo
                 const getBudgetSpent = (id) => {
-                    // Soma lançamentos do dia a dia
                     let spent = filteredDailyExpenses.value.filter(e => e.budgetId === id).reduce((a, c) => a + c.amount, 0);
-                    // Soma as contas fixas cadastradas nesse orçamento
                     spent += fixedExpenses.value.filter(e => e.budgetId === id).reduce((a, c) => a + c.amount, 0);
                     return spent;
                 };
@@ -844,9 +854,10 @@
                     if(list === 'fixedExpenses') {
                         // Usa o budgetId selecionado, se não tiver cai pro primeiro
                         const bId = newItem.value.budgetId || budgets.value[0]?.id || 'moradia';
-                        fixedExpenses.value.push({ id: Date.now(), name: newItem.value.name, amount: itemAmount, budgetId: bId, paid: false });
+                        const method = newItem.value.method || 'dinheiro';
+                        fixedExpenses.value.push({ id: Date.now(), name: newItem.value.name, amount: itemAmount, budgetId: bId, method: method, paid: false });
                     }
-                    newItem.value = { name: '', amount: '', budgetId: budgets.value[0]?.id || 'moradia' };
+                    newItem.value = { name: '', amount: '', budgetId: budgets.value[0]?.id || 'moradia', method: 'dinheiro' };
                 };
 
                 const addDailyExpense = () => {
@@ -868,7 +879,7 @@
                     scannedItems.value = [];
                 };
 
-                // IA Scanner Função Original
+                // IA Scanner
                 const handleScan = async (e) => {
                     const file = e.target.files[0];
                     if (!file) return;
