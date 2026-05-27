@@ -58,13 +58,6 @@
             0% { opacity: 1; transform: scale(1); }
             100% { opacity: 0; transform: scale(1.1); pointer-events: none; visibility: hidden; }
         }
-
-        .celebrate-in { animation: zoomIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        @keyframes zoomIn {
-            0% { opacity: 0; transform: scale(0.5); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-        .animate-spin-slow { animation: spin 4s linear infinite; }
         
         /* Heatmap para o calendário */
         .heat-0 { background-color: #fef3c7; }
@@ -88,14 +81,6 @@
 
     <div id="app" class="h-[100dvh] w-full max-w-6xl md:h-[90dvh] md:p-0 md:rounded-3xl relative overflow-hidden flex flex-col md:flex-row bg-[#fdf8f5] md:retro-border md:retro-shadow-lg" v-cloak>
         
-        <!-- Overlay Celebração -->
-        <div v-if="showCelebration" class="fixed inset-0 z-[9999] bg-retro-dark/90 flex flex-col items-center justify-center celebrate-in backdrop-blur-sm">
-            <i class="fa-solid fa-star text-8xl text-retro-yellow mb-6 animate-spin-slow" style="filter: drop-shadow(0 0 20px #fcd34d);"></i>
-            <h2 class="text-6xl font-black text-white uppercase tracking-tighter" style="text-shadow: 4px 4px 0px #fb7185;">Uhuuu!</h2>
-            <p class="text-2xl text-retro-teal font-black uppercase tracking-widest mt-4">Fatura Paga!</p>
-            <p class="text-sm font-bold text-retro-dark mt-4 bg-retro-cream px-4 py-2 rounded-xl retro-border">Limite Liberado com Sucesso</p>
-        </div>
-
         <!-- Splash Screen -->
         <div v-if="showSplash" class="absolute inset-0 z-[999] bg-retro-yellow flex flex-col items-center justify-center" :class="{ 'splash-out': hideSplashAnimation }">
             <div class="bg-retro-dark p-6 rounded-3xl retro-border retro-shadow-lg transform -rotate-6 mb-6 z-10 relative">
@@ -140,7 +125,6 @@
 
         <template v-if="user && !authLoading && !showSplash">
             
-            <!-- Menu Desktop -->
             <aside class="hidden md:flex flex-col w-72 bg-retro-cream border-r-[3px] border-retro-dark p-6 z-20 shrink-0">
                 <div class="mb-8 mt-2 text-center">
                     <div class="bg-retro-pink w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4 retro-border retro-shadow transform rotate-3">
@@ -178,7 +162,6 @@
             <main class="flex-1 flex flex-col h-full relative overflow-hidden bg-[#fdf8f5]">
                 <div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#292524 2px, transparent 2px); background-size: 20px 20px;"></div>
                 
-                <!-- Header Superior com Navegação de Mês -->
                 <header class="bg-retro-dark text-retro-cream px-5 pt-6 pb-5 shadow-md z-20 shrink-0 border-b-[3px] border-retro-dark relative">
                     <div class="absolute top-4 left-1/2 transform -translate-x-1/2 bg-white text-retro-dark retro-border shadow-[2px_2px_0px_#fef3c7] rounded-full px-3 py-1 flex items-center gap-3 z-30">
                         <button @click="changeMonth(-1)" class="active:scale-90"><i class="fa-solid fa-chevron-left text-[10px]"></i></button>
@@ -192,14 +175,14 @@
                     
                     <div class="max-w-4xl mx-auto relative z-10 flex flex-col gap-3 mt-6">
                         <div class="flex flex-col md:flex-row gap-3">
-                            <div class="bg-retro-teal p-4 rounded-xl border-[3px] border-retro-dark shadow-[4px_4px_0px_#fef3c7] flex-1 flex justify-between items-center relative overflow-hidden transition-all duration-300">
+                            <div class="bg-retro-teal p-4 rounded-xl border-[3px] border-retro-dark shadow-[4px_4px_0px_#fef3c7] flex-1 flex justify-between items-center relative overflow-hidden">
                                 <div class="z-10">
                                     <p class="text-[#292524] text-[10px] font-black uppercase tracking-widest mb-1">Saldo Real em Dinheiro</p>
                                     <h2 class="text-3xl font-black tracking-tighter text-[#292524] leading-none">{{ formatCurrency(balance) }}</h2>
                                 </div>
                                 <i class="fa-solid fa-wallet text-4xl text-[#292524] opacity-20 transform -rotate-12"></i>
                             </div>
-                            <div class="bg-retro-pink p-4 rounded-xl border-[3px] border-retro-dark shadow-[4px_4px_0px_#fef3c7] flex-1 flex justify-between items-center relative overflow-hidden transition-all duration-300">
+                            <div class="bg-retro-pink p-4 rounded-xl border-[3px] border-retro-dark shadow-[4px_4px_0px_#fef3c7] flex-1 flex justify-between items-center relative overflow-hidden">
                                 <div class="z-10 w-full">
                                     <div class="flex justify-between items-start w-full">
                                         <p class="text-[#292524] text-[10px] font-black uppercase tracking-widest mb-1">Limite Disponível</p>
@@ -223,23 +206,21 @@
                         <div v-if="activeTab === 'resumo'" class="space-y-6 animate-fade-in">
                             <div class="grid grid-cols-3 gap-2">
                                 <div class="bg-white p-3 rounded-xl retro-border retro-shadow flex flex-col justify-center text-center relative overflow-hidden">
-                                    <p class="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-emerald-700">Recebido</p>
-                                    <p class="font-black text-emerald-600 text-sm md:text-lg leading-tight">{{ formatCurrency(receivedIncomes) }}</p>
-                                    <p class="text-[7px] text-gray-400 mt-0.5 uppercase font-bold">De {{ formatCurrency(expectedIncomes) }}</p>
+                                    <p class="text-[8px] md:text-[10px] font-black uppercase tracking-widest">Entradas</p>
+                                    <p class="font-black text-emerald-600 text-sm md:text-lg">{{ formatCurrency(totalIncome) }}</p>
                                 </div>
                                 <div class="bg-white p-3 rounded-xl retro-border retro-shadow flex flex-col justify-center text-center">
-                                    <p class="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-rose-700">Fixas Pagas</p>
-                                    <p class="font-black text-rose-600 text-sm md:text-lg leading-tight">{{ formatCurrency(paidFixedCash) }}</p>
-                                    <p class="text-[7px] text-gray-400 mt-0.5 uppercase font-bold">De {{ formatCurrency(expectedFixedCash) }}</p>
+                                    <p class="text-[8px] md:text-[10px] font-black uppercase tracking-widest">Contas Fixas</p>
+                                    <!-- AQUI ESTÁ A CORREÇÃO: Mostra totalFixedExpenses (Dinheiro + Crédito) -->
+                                    <p class="font-black text-rose-600 text-sm md:text-lg">{{ formatCurrency(totalFixedExpenses) }}</p>
                                 </div>
                                 <div class="bg-white p-3 rounded-xl retro-border retro-shadow flex flex-col justify-center text-center">
-                                    <p class="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-retro-blue">No Cofrinho</p>
-                                    <p class="font-black text-retro-blue text-sm md:text-lg leading-tight">{{ formatCurrency(totalSaved) }}</p>
-                                    <p class="text-[7px] text-white select-none mt-0.5">-</p>
+                                    <p class="text-[8px] md:text-[10px] font-black uppercase tracking-widest">No Cofrinho</p>
+                                    <p class="font-black text-retro-blue text-sm md:text-lg">{{ formatCurrency(totalSaved) }}</p>
                                 </div>
                             </div>
 
-                            <!-- CALENDÁRIO -->
+                            <!-- CALENDÁRIO (Restaurado e Funcionando) -->
                             <div class="bg-white rounded-2xl retro-border retro-shadow p-5 mb-6">
                                 <h4 class="font-black text-sm text-retro-dark uppercase tracking-widest mb-4 border-b-[3px] border-retro-dark pb-2">
                                     <i class="fa-regular fa-calendar-days mr-2 text-retro-orange"></i> Ritmo de Gastos Diários
@@ -327,7 +308,7 @@
                             </div>
 
                             <!-- FATURA DO CARTÃO -->
-                            <section class="bg-retro-dark text-white rounded-xl retro-border retro-shadow p-4 relative overflow-hidden transition-all duration-300">
+                            <section class="bg-retro-dark text-white rounded-xl retro-border retro-shadow p-4 relative overflow-hidden">
                                 <div class="absolute inset-0 opacity-[0.05]" style="background-image: repeating-linear-gradient(45deg, #fff, #fff 10px, transparent 10px, transparent 20px);"></div>
                                 
                                 <div class="relative z-10 flex justify-between items-center mb-3 border-b-2 border-white/20 pb-2">
@@ -342,10 +323,10 @@
                                 <div class="relative z-10 flex justify-between items-end">
                                     <div>
                                         <p class="text-[9px] text-gray-300 font-bold mb-1 uppercase tracking-wider">Vencimento em {{ currentMonthName }}/{{ currentYear }}</p>
-                                        <p class="text-2xl font-black transition-colors" :class="isFaturaPaga ? 'line-through text-retro-teal' : 'text-retro-cream'">{{ formatCurrency(faturaDesteMes) }}</p>
+                                        <p class="text-2xl font-black" :class="isFaturaPaga ? 'line-through text-gray-400' : 'text-retro-cream'">{{ formatCurrency(faturaDesteMes) }}</p>
                                     </div>
                                     <div class="text-right">
-                                        <p class="text-[8px] text-gray-400 font-bold max-w-[120px]">Soma de parcelas e contas fixas no crédito.</p>
+                                        <p class="text-[8px] text-gray-400 font-bold max-w-[120px]">Soma de parcelas diárias e contas fixas pagas no crédito.</p>
                                     </div>
                                 </div>
                             </section>
@@ -357,7 +338,7 @@
                                     <div v-for="inc in incomes" :key="inc.id" class="flex justify-between items-center p-2 bg-retro-cream retro-border rounded-lg transition-all" :class="inc.received && !isEditing ? 'opacity-70 bg-emerald-50 border-emerald-800' : ''">
                                         <template v-if="!isEditing">
                                             <div class="flex items-center gap-2">
-                                                <button @click="toggleStatus(inc, 'received')" class="w-6 h-6 border-2 border-retro-dark rounded bg-white flex items-center justify-center shadow-[1px_1px_0px_#292524] active:shadow-none active:translate-y-[1px] transition-colors">
+                                                <button @click="toggleStatus(inc, 'received')" class="w-6 h-6 border-2 border-retro-dark rounded bg-white flex items-center justify-center shadow-[1px_1px_0px_#292524] active:shadow-none active:translate-y-[1px]">
                                                     <i v-if="inc.received" class="fa-solid fa-check text-[10px] text-emerald-600"></i>
                                                 </button>
                                                 <span class="text-xs font-black uppercase" :class="inc.received ? 'line-through text-gray-500' : ''">{{ inc.name }}</span>
@@ -392,16 +373,11 @@
                                         <div class="flex justify-between items-center w-full">
                                             <template v-if="!isEditing">
                                                 <div class="flex items-center gap-2">
-                                                    <!-- Só mostra botão de PAGO se for dinheiro, crédito é gerido pela fatura -->
-                                                    <button v-if="exp.method !== 'credito'" @click="toggleStatus(exp, 'paid')" class="w-6 h-6 border-2 border-retro-dark rounded bg-white flex items-center justify-center shrink-0 shadow-[1px_1px_0px_#292524] active:shadow-none active:translate-y-[1px]">
+                                                    <button @click="toggleStatus(exp, 'paid')" class="w-6 h-6 border-2 border-retro-dark rounded bg-white flex items-center justify-center shrink-0 shadow-[1px_1px_0px_#292524] active:shadow-none active:translate-y-[1px]">
                                                         <i v-if="exp.paid" class="fa-solid fa-check text-[10px] text-retro-dark"></i>
                                                     </button>
-                                                    <div v-else class="w-6 h-6 rounded flex items-center justify-center shrink-0 bg-transparent">
-                                                        <i class="fa-solid fa-lock text-[10px] text-gray-400 opacity-50" title="Gerido pela fatura"></i>
-                                                    </div>
-                                                    
                                                     <div class="flex flex-col">
-                                                        <span class="text-xs font-black uppercase leading-tight" :class="exp.paid || (exp.method === 'credito' && isFaturaPaga) ? 'line-through text-gray-500' : ''">{{ exp.name }}</span>
+                                                        <span class="text-xs font-black uppercase leading-tight" :class="exp.paid ? 'line-through text-gray-500' : ''">{{ exp.name }}</span>
                                                         <div class="flex items-center gap-1 mt-0.5">
                                                             <span class="text-[7px] font-black uppercase text-gray-600 bg-gray-200 border border-gray-400 px-1 rounded">{{ getBudget(exp.budgetId).name }}</span>
                                                             <span v-if="exp.method === 'credito'" class="text-[7px] font-black uppercase text-retro-pink bg-retro-pink/10 border border-retro-pink px-1 rounded">💳 Fatura</span>
@@ -411,16 +387,8 @@
                                                 </div>
                                                 <div class="flex flex-col items-end gap-1">
                                                     <span class="text-xs font-black">{{ formatCurrency(exp.amount) }}</span>
-                                                    
-                                                    <!-- Status de Pagamento -->
-                                                    <template v-if="exp.method !== 'credito'">
-                                                        <span v-if="exp.paid" class="text-[8px] bg-emerald-200 text-emerald-800 border border-emerald-800 px-1 py-0.5 rounded font-black uppercase tracking-wider">Pago</span>
-                                                        <span v-else class="text-[8px] bg-rose-200 text-rose-800 border border-rose-800 px-1 py-0.5 rounded font-black uppercase tracking-wider">Pendente</span>
-                                                    </template>
-                                                    <template v-else>
-                                                        <span v-if="isFaturaPaga" class="text-[8px] bg-emerald-200 text-emerald-800 border border-emerald-800 px-1 py-0.5 rounded font-black uppercase tracking-wider">Fatura Paga</span>
-                                                        <span v-else class="text-[8px] bg-gray-200 text-gray-600 border border-gray-400 px-1 py-0.5 rounded font-black uppercase tracking-wider">Na Fatura</span>
-                                                    </template>
+                                                    <span v-if="exp.paid" class="text-[8px] bg-emerald-200 text-emerald-800 border border-emerald-800 px-1 py-0.5 rounded font-black uppercase tracking-wider">Pago</span>
+                                                    <span v-else class="text-[8px] bg-rose-200 text-rose-800 border border-rose-800 px-1 py-0.5 rounded font-black uppercase tracking-wider">Pendente</span>
                                                 </div>
                                             </template>
                                             
@@ -546,7 +514,7 @@
                                     <div v-if="scannedItems && scannedItems.length > 0" class="mt-2 bg-[#fdf8f5] retro-border rounded-xl p-3">
                                         <p class="text-[9px] font-black uppercase tracking-widest mb-2 border-b-2 border-dashed border-retro-dark pb-1">Itens Identificados</p>
                                         <div class="max-h-28 overflow-y-auto space-y-1 custom-scrollbar">
-                                            <div v-for="item in scannedItems" class="flex justify-between text-[9px] font-bold uppercase">
+                                            <div v-for="(item, idx) in scannedItems" :key="idx" class="flex justify-between text-[9px] font-bold uppercase">
                                                 <span class="truncate pr-2">{{ item.qty }}x {{ item.name }}</span>
                                                 <span class="font-black">{{ formatCurrency(item.price) }}</span>
                                             </div>
@@ -668,9 +636,6 @@
                 const showSplash = ref(true);
                 const hideSplashAnimation = ref(false);
 
-                // Variável para a tela de celebração
-                const showCelebration = ref(false);
-
                 // Calendário
                 const currentMonth = ref(new Date().getMonth());
                 const currentYear = ref(new Date().getFullYear());
@@ -778,7 +743,6 @@
                     });
                 });
                 
-                // Calendário
                 const daysInMonth = computed(() => new Date(currentYear.value, currentMonth.value + 1, 0).getDate());
                 const emptyDaysStart = computed(() => new Date(currentYear.value, currentMonth.value, 1).getDay());
                 
@@ -813,7 +777,6 @@
                             const expDate = new Date(exp.timestamp);
                             const expMonth = expDate.getMonth();
                             const expYear = expDate.getFullYear();
-
                             const monthsDifference = (targetYear - expYear) * 12 + (targetMonth - expMonth);
 
                             if (monthsDifference > 0 && monthsDifference <= exp.installments) {
@@ -839,98 +802,37 @@
 
                 const toggleFaturaPaga = () => {
                     if (isFaturaPaga.value) {
-                        settings.value.faturasPagas[faturaKey.value] = false;
+                        delete settings.value.faturasPagas[faturaKey.value];
                     } else {
                         settings.value.faturasPagas[faturaKey.value] = true;
-                        
-                        // Dispara a animação de Celebração!
-                        showCelebration.value = true;
-                        setTimeout(() => {
-                            showCelebration.value = false;
-                        }, 2500); // Fica na tela por 2.5s
                     }
                 };
 
-                // LÓGICA DE LIMITE LIBERADO COM FATURAS PAGAS
-                const availableCredit = computed(() => {
-                    let usedLimit = 0;
-                    
-                    // 1. Soma o valor TOTAL das compras parceladas no crédito (compromete o limite inteiro na hora)
-                    dailyExpenses.value.forEach(exp => {
-                        if (exp.method === 'credito') {
-                            usedLimit += (exp.totalAmount || exp.amount);
-                        }
-                    });
-
-                    // 2. Devolve o limite para cada parcela que está em uma fatura PAGA
-                    dailyExpenses.value.forEach(exp => {
-                        if (exp.method === 'credito') {
-                            const expDate = new Date(exp.timestamp);
-                            const expMonth = expDate.getMonth();
-                            const expYear = expDate.getFullYear();
-                            
-                            for (let i = 1; i <= exp.installments; i++) {
-                                let targetMonth = expMonth + i;
-                                let targetYear = expYear;
-                                while (targetMonth > 11) {
-                                    targetMonth -= 12;
-                                    targetYear += 1;
-                                }
-                                const key = `${targetYear}-${targetMonth}`;
-                                // Se a fatura daquele mês foi paga, devolvemos a parte do limite
-                                if (settings.value.faturasPagas[key]) {
-                                    usedLimit -= exp.amount;
-                                }
-                            }
-                        }
-                    });
-
-                    // 3. Contas fixas no crédito comprometem o limite do mês atual, SE a fatura ainda não foi paga
-                    const currentFaturaKey = `${currentYear.value}-${currentMonth.value}`;
-                    if (!settings.value.faturasPagas[currentFaturaKey]) {
-                        fixedExpenses.value.forEach(exp => {
-                            if (exp.method === 'credito') {
-                                usedLimit += exp.amount;
-                            }
-                        });
-                    }
-
-                    return settings.value.creditLimit - usedLimit;
+                const dailyCash = computed(() => filteredDailyExpenses.value.filter(e => e.method !== 'credito').reduce((a, c) => a + c.amount, 0));
+                
+                const totalFixedCash = computed(() => fixedExpenses.value.filter(e => e.method !== 'credito').reduce((a, c) => a + c.amount, 0));
+                
+                // CORREÇÃO AQUI: Esta variável soma todas as fixas (Cartão e Dinheiro) para exibir na Analytics
+                const totalFixedExpenses = computed(() => fixedExpenses.value.reduce((a, c) => a + c.amount, 0));
+                
+                const totalCreditUsedThisMonth = computed(() => {
+                    let used = filteredDailyExpenses.value.filter(e => e.method === 'credito').reduce((a, c) => a + (c.totalAmount || c.amount), 0);
+                    used += fixedExpenses.value.filter(e => e.method === 'credito').reduce((a, c) => a + c.amount, 0);
+                    return used;
                 });
-
-                // LÓGICA DO SALDO REAL EXATO
                 
-                // Entradas reais vs. Entradas Totais (para mostrar no Resumo)
-                const receivedIncomes = computed(() => incomes.value.filter(i => i.received).reduce((a, c) => a + c.amount, 0));
-                const expectedIncomes = computed(() => incomes.value.reduce((a, c) => a + c.amount, 0));
-                
-                // Contas Fixas pagas em dinheiro vs. Totais (para mostrar no Resumo)
-                const paidFixedCash = computed(() => fixedExpenses.value.filter(e => e.method !== 'credito' && e.paid).reduce((a, c) => a + c.amount, 0));
-                const expectedFixedCash = computed(() => fixedExpenses.value.filter(e => e.method !== 'credito').reduce((a, c) => a + c.amount, 0));
+                const availableCredit = computed(() => settings.value.creditLimit - totalCreditUsedThisMonth.value);
 
+                const totalIncome = computed(() => incomes.value.reduce((a, c) => a + c.amount, 0));
                 const totalSaved = computed(() => savings.value.reduce((a, c) => a + c.amount, 0));
                 
-                // O saldo real em dinheiro
                 const balance = computed(() => {
-                    // Soma as entradas marcadas como RECEBIDAS
-                    const recIncomes = receivedIncomes.value;
-                    
-                    // Contas fixas pagas APENAS em dinheiro
-                    const paidFixCash = paidFixedCash.value;
-                    
-                    // Gastos em dinheiro já saem da conta automaticamente
-                    const dailyCash = filteredDailyExpenses.value.filter(e => e.method !== 'credito').reduce((a, c) => a + c.amount, 0);
-                    
-                    // Fatura Deste Mês (Só desconta se estiver marcada como Paga)
-                    const faturaAmount = isFaturaPaga.value ? faturaDesteMes.value : 0;
-                    
-                    // Saldo = Recebido - Pagos em Dinheiro - Diários em Dinheiro - Fatura Paga - Cofrinho
-                    return recIncomes - paidFixCash - dailyCash - faturaAmount - totalSaved.value;
+                    let b = totalIncome.value - totalFixedCash.value - dailyCash.value - totalSaved.value;
+                    b -= faturaDesteMes.value;
+                    return b;
                 });
 
-                // Orçamentos baseados no projetado, para não estourar mesmo se o salário atrasar um dia
-                const expectedFixedAll = computed(() => fixedExpenses.value.reduce((a, c) => a + c.amount, 0));
-                const availableForBudgets = computed(() => expectedIncomes.value - expectedFixedAll.value - totalSaved.value - faturaDesteMes.value);
+                const availableForBudgets = computed(() => totalIncome.value - totalFixedCash.value - totalSaved.value - faturaDesteMes.value);
 
                 const formatCurrency = (val) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val || 0);
                 
@@ -1007,7 +909,6 @@
                     scannedItems.value = [];
                 };
 
-                // IA Scanner
                 const handleScan = async (e) => {
                     const file = e.target.files[0];
                     if (!file) return;
@@ -1058,7 +959,9 @@
                     savings.value.push({ id: Date.now(), name: newGoal.value.name, target: parseFloat(newGoal.value.target), amount: 0 });
                     newGoal.value = { name: '', target: '' };
                 };
+                
                 const removeGoal = (id) => { savings.value = savings.value.filter(g => g.id !== id); };
+                
                 const depositMoney = (id) => {
                     const amnt = parseFloat(depositAmounts.value[id]);
                     if(amnt) { const g = savings.value.find(x => x.id === id); if(g) g.amount += amnt; depositAmounts.value[id] = ''; }
@@ -1067,8 +970,8 @@
                 return {
                     user, authLoading, loading, isLogin, email, password, authError, handleAuth, logout, toggleAuthMode, showSplash, hideSplashAnimation,
                     activeTab, incomes, fixedExpenses, budgets, dailyExpenses, filteredDailyExpenses, savings, isEditing, isEditingBudgets, isProcessing, scannedItems,
-                    newItem, newBudget, newExpense, newGoal, depositAmounts, showCelebration,
-                    receivedIncomes, expectedIncomes, paidFixedCash, expectedFixedCash, totalSaved, balance, availableForBudgets, availableCredit, faturaDesteMes, isFaturaPaga, toggleFaturaPaga,
+                    newItem, newBudget, newExpense, newGoal, depositAmounts,
+                    totalIncome, totalFixedCash, totalFixedExpenses, totalSaved, balance, availableForBudgets, availableCredit, faturaDesteMes, isFaturaPaga, toggleFaturaPaga,
                     editCreditLimit, formatCurrency, getBudgetSpent, getBudgetPercentage, getBudget, toggleStatus, removeItem, addItem, addDailyExpense, handleScan, createGoal, removeGoal, depositMoney,
                     showModal, modalData, confirmReset, confirmModalAction,
                     currentMonthName, currentYear, changeMonth,
