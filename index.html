@@ -376,15 +376,22 @@
                             <section class="bg-white rounded-xl retro-border retro-shadow p-4">
                                 <h4 class="text-xs font-black uppercase border-b-[3px] border-retro-dark pb-2 mb-3 text-retro-pink"><i class="fa-solid fa-arrow-up mr-1"></i> Saídas Fixas</h4>
                                 <div class="space-y-2">
-                                    <div v-for="exp in fixedExpenses" :key="exp.id" class="flex flex-col gap-2 p-2.5 bg-retro-cream retro-border rounded-lg transition-all" :class="exp.paid && !isEditing ? 'opacity-70 bg-gray-100 border-gray-400' : ''">
+                                    <div v-for="exp in fixedExpenses" :key="exp.id" class="flex flex-col gap-2 p-2.5 bg-retro-cream retro-border rounded-lg transition-all" :class="(exp.method === 'credito' ? isFaturaPaga : exp.paid) && !isEditing ? 'opacity-70 bg-gray-100 border-gray-400' : ''">
                                         <div class="flex justify-between items-center w-full">
                                             <template v-if="!isEditing">
                                                 <div class="flex items-center gap-2">
-                                                    <button @click="toggleStatus(exp, 'paid')" class="w-6 h-6 border-2 border-retro-dark rounded bg-white flex items-center justify-center shrink-0 shadow-[1px_1px_0px_#292524] active:shadow-none active:translate-y-[1px]">
+                                                    <!-- Exibe o botão clicável apenas se FOR DINHEIRO/À VISTA -->
+                                                    <button v-if="exp.method !== 'credito'" @click="toggleStatus(exp, 'paid')" class="w-6 h-6 border-2 border-retro-dark rounded bg-white flex items-center justify-center shrink-0 shadow-[1px_1px_0px_#292524] active:shadow-none active:translate-y-[1px]">
                                                         <i v-if="exp.paid" class="fa-solid fa-check text-[10px] text-retro-dark"></i>
                                                     </button>
+                                                    <!-- Exibe um ícone fixo se for CARTÃO DE CRÉDITO (vinculado à fatura) -->
+                                                    <div v-else class="w-6 h-6 border-2 border-retro-dark rounded flex items-center justify-center shrink-0" :class="isFaturaPaga ? 'bg-emerald-200' : 'bg-gray-200 opacity-60'">
+                                                        <i v-if="isFaturaPaga" class="fa-solid fa-check text-[10px] text-emerald-800"></i>
+                                                        <i v-else class="fa-solid fa-lock text-[10px] text-gray-500" title="Vinculado à Fatura"></i>
+                                                    </div>
+
                                                     <div class="flex flex-col">
-                                                        <span class="text-xs font-black uppercase leading-tight" :class="exp.paid ? 'line-through text-gray-500' : ''">{{ exp.name }}</span>
+                                                        <span class="text-xs font-black uppercase leading-tight" :class="(exp.method === 'credito' ? isFaturaPaga : exp.paid) ? 'line-through text-gray-500' : ''">{{ exp.name }}</span>
                                                         <div class="flex items-center gap-1 mt-0.5">
                                                             <span class="text-[7px] font-black uppercase text-gray-600 bg-gray-200 border border-gray-400 px-1 rounded">{{ getBudget(exp.budgetId).name }}</span>
                                                             <span v-if="exp.method === 'credito'" class="text-[7px] font-black uppercase text-retro-pink bg-retro-pink/10 border border-retro-pink px-1 rounded">💳 Fatura</span>
@@ -394,7 +401,7 @@
                                                 </div>
                                                 <div class="flex flex-col items-end gap-1">
                                                     <span class="text-xs font-black">{{ formatCurrency(exp.amount) }}</span>
-                                                    <span v-if="exp.paid" class="text-[8px] bg-emerald-200 text-emerald-800 border border-emerald-800 px-1 py-0.5 rounded font-black uppercase tracking-wider">Pago</span>
+                                                    <span v-if="exp.method === 'credito' ? isFaturaPaga : exp.paid" class="text-[8px] bg-emerald-200 text-emerald-800 border border-emerald-800 px-1 py-0.5 rounded font-black uppercase tracking-wider">Pago</span>
                                                     <span v-else class="text-[8px] bg-rose-200 text-rose-800 border border-rose-800 px-1 py-0.5 rounded font-black uppercase tracking-wider">Pendente</span>
                                                 </div>
                                             </template>
@@ -596,29 +603,34 @@
                         </div>
                     </div>
 
-                    <!-- Modal Celebração Especial (A Estrelinha Brilhante) -->
-                    <div v-else class="bg-retro-yellow border-[4px] border-retro-dark rounded-3xl p-6 max-w-xs w-full shadow-[8px_8px_0px_#292524] text-center relative overflow-hidden animate-pop-in">
-                        <!-- Background Shapes Rodando -->
-                        <i class="fa-solid fa-certificate absolute -top-10 -right-10 text-8xl text-white opacity-40 animate-spin-slow"></i>
-                        <i class="fa-solid fa-star absolute -bottom-6 -left-6 text-7xl text-retro-pink opacity-40 animate-spin-slow" style="animation-direction: reverse;"></i>
+                    <!-- Modal Celebração FULL SCREEN GAME BONUS 🌟 -->
+                    <div v-else class="absolute inset-0 bg-retro-teal z-[200] flex flex-col items-center justify-center p-6 overflow-hidden animate-pop-in">
+                        <!-- Raios/Estrelas no fundo rodando -->
+                        <i class="fa-solid fa-star absolute -top-20 -right-20 text-[250px] text-retro-yellow opacity-40 animate-spin-slow"></i>
+                        <i class="fa-solid fa-star absolute -bottom-20 -left-20 text-[250px] text-retro-pink opacity-40 animate-spin-slow" style="animation-direction: reverse; animation-duration: 6s;"></i>
+                        
+                        <!-- Pontinhos de fundo estilo game retro -->
+                        <div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: radial-gradient(#292524 4px, transparent 4px); background-size: 30px 30px;"></div>
 
-                        <!-- Ícone Gigante Central -->
-                        <div class="relative z-10 mb-4 mt-2">
-                            <div class="absolute inset-0 bg-white rounded-full animate-ping opacity-50 scale-150"></div>
-                            <i class="fa-solid fa-star text-7xl text-retro-teal drop-shadow-[4px_4px_0px_#292524] relative z-10 animate-bounce"></i>
+                        <!-- Ícone Gigante Central Pulsante -->
+                        <div class="relative z-10 mb-8 mt-4 flex items-center justify-center">
+                            <div class="absolute bg-white rounded-full animate-ping opacity-60 w-32 h-32 md:w-48 md:h-48" style="animation-duration: 2s;"></div>
+                            <i class="fa-solid fa-star text-9xl md:text-[160px] text-retro-yellow drop-shadow-[8px_8px_0px_#292524] relative z-10 animate-bounce"></i>
                         </div>
 
-                        <!-- Título Gigante -->
-                        <h3 class="text-4xl font-black uppercase mb-3 text-retro-dark tracking-tighter leading-none relative z-10" style="text-shadow: 2px 2px 0px white;">{{ modalData.title }}</h3>
+                        <!-- Título Gigante com Sombra 3D -->
+                        <h3 class="text-6xl md:text-8xl font-black uppercase mb-4 text-white tracking-tighter leading-none relative z-10 text-center" style="text-shadow: 6px 6px 0px #292524, -2px -2px 0px #292524, 2px -2px 0px #292524, -2px 2px 0px #292524, 2px 2px 0px #292524;">
+                            {{ modalData.title }}
+                        </h3>
                         
-                        <!-- Mensagem -->
-                        <p class="text-[11px] leading-tight font-black text-retro-dark bg-white border-[3px] border-retro-dark rounded-xl p-3 mb-5 relative z-10 retro-shadow">
+                        <!-- Mensagem na caixa gordinha -->
+                        <p class="text-sm md:text-xl text-center leading-tight font-black text-retro-dark bg-white border-[4px] border-retro-dark rounded-2xl p-5 mb-10 relative z-10 retro-shadow-lg max-w-md">
                             {{ modalData.message }}
                         </p>
                         
-                        <!-- Botão -->
-                        <button @click="showModal = false" class="w-full bg-retro-pink text-white retro-border retro-shadow retro-btn font-black p-3 rounded-xl text-xs uppercase tracking-widest relative z-10">
-                            Top! 🚀
+                        <!-- Botãozão -->
+                        <button @click="showModal = false" class="w-full max-w-xs bg-retro-yellow text-retro-dark border-[4px] border-retro-dark shadow-[6px_6px_0px_#292524] active:shadow-[2px_2px_0px_#292524] active:translate-y-1 active:translate-x-1 transition-all font-black p-4 rounded-2xl text-xl uppercase tracking-widest relative z-10">
+                            IRRA! 🚀
                         </button>
                     </div>
                 </div>
@@ -843,8 +855,7 @@
                         delete settings.value.faturasPagas[faturaKey.value];
                     } else {
                         settings.value.faturasPagas[faturaKey.value] = true;
-                        // Aciona a Celebração Gigante e Brilhante!
-                        openModal('UHUUU!', 'Sua Fatura foi paga e o limite do cartão tá liberado pra usar de novo!', null, false, true);
+                        openModal('UHUUU!', 'Fatura Paga! Seu limite de cartão foi liberado para você usar de novo. Arrasou!', null, false, true);
                     }
                 };
 
@@ -918,7 +929,6 @@
                     if(novo && !isNaN(novo)) settings.value.creditLimit = parseFloat(novo);
                 };
 
-                // Atualizado para suportar modal de Celebração
                 const openModal = (title, message, action = null, isInfo = false, isCelebration = false) => { 
                     modalData.value = { title, message, action, isInfo, isCelebration }; 
                     showModal.value = true; 
