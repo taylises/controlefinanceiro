@@ -211,7 +211,6 @@
                                 </div>
                                 <div class="bg-white p-3 rounded-xl retro-border retro-shadow flex flex-col justify-center text-center">
                                     <p class="text-[8px] md:text-[10px] font-black uppercase tracking-widest">Contas Fixas</p>
-                                    <!-- AQUI ESTÁ A CORREÇÃO: Mostra totalFixedExpenses (Dinheiro + Crédito) -->
                                     <p class="font-black text-rose-600 text-sm md:text-lg">{{ formatCurrency(totalFixedExpenses) }}</p>
                                 </div>
                                 <div class="bg-white p-3 rounded-xl retro-border retro-shadow flex flex-col justify-center text-center">
@@ -220,7 +219,7 @@
                                 </div>
                             </div>
 
-                            <!-- CALENDÁRIO (Restaurado e Funcionando) -->
+                            <!-- CALENDÁRIO -->
                             <div class="bg-white rounded-2xl retro-border retro-shadow p-5 mb-6">
                                 <h4 class="font-black text-sm text-retro-dark uppercase tracking-widest mb-4 border-b-[3px] border-retro-dark pb-2">
                                     <i class="fa-regular fa-calendar-days mr-2 text-retro-orange"></i> Ritmo de Gastos Diários
@@ -575,12 +574,17 @@
                 </nav>
 
                 <div v-if="showModal" class="absolute inset-0 bg-retro-dark/80 z-[100] flex items-center justify-center p-4">
-                    <div class="bg-retro-cream retro-border rounded-xl p-5 max-w-xs w-full retro-shadow-lg text-center">
-                        <h3 class="text-lg font-black uppercase mb-2">{{ modalData.title }}</h3>
-                        <p class="text-[10px] font-bold bg-white border-2 border-retro-dark rounded p-2 mb-4">{{ modalData.message }}</p>
-                        <div class="flex flex-col gap-2">
-                            <button @click="confirmModalAction" class="w-full bg-retro-pink retro-border retro-btn font-black p-2 rounded text-[10px] uppercase">Confirmar</button>
-                            <button @click="showModal = false" class="w-full bg-white retro-border retro-btn font-black p-2 rounded text-[10px] uppercase">Cancelar</button>
+                    <div class="bg-retro-cream retro-border rounded-xl p-5 max-w-xs w-full retro-shadow-lg text-center relative overflow-hidden">
+                        <!-- Efeito de celebração para popups de info (como fatura paga) -->
+                        <div v-if="modalData.isInfo" class="absolute -top-4 -left-4 w-16 h-16 bg-retro-pink rounded-full mix-blend-multiply opacity-50"></div>
+                        <div v-if="modalData.isInfo" class="absolute -bottom-4 -right-4 w-20 h-20 bg-retro-teal rounded-full mix-blend-multiply opacity-50"></div>
+                        
+                        <h3 class="text-lg font-black uppercase mb-2 relative z-10" :class="modalData.isInfo ? 'text-retro-teal' : ''">{{ modalData.title }}</h3>
+                        <p class="text-[10px] font-bold bg-white border-2 border-retro-dark rounded p-3 mb-4 relative z-10">{{ modalData.message }}</p>
+                        
+                        <div class="flex flex-col gap-2 relative z-10">
+                            <button v-if="modalData.action" @click="confirmModalAction" class="w-full bg-retro-pink retro-border retro-btn font-black p-2 rounded text-[10px] uppercase">Confirmar</button>
+                            <button @click="showModal = false" class="w-full retro-border retro-btn font-black p-2 rounded text-[10px] uppercase" :class="modalData.isInfo ? 'bg-retro-teal text-white' : 'bg-white text-retro-dark'">{{ modalData.isInfo ? 'Maravilha!' : 'Cancelar' }}</button>
                         </div>
                     </div>
                 </div>
@@ -661,7 +665,7 @@
                 const depositAmounts = ref({});
 
                 const showModal = ref(false);
-                const modalData = ref({ title: '', message: '', action: null });
+                const modalData = ref({ title: '', message: '', action: null, isInfo: false });
 
                 onMounted(() => {
                     setTimeout(() => { hideSplashAnimation.value = true; setTimeout(() => { showSplash.value = false; }, 500); }, 1500);
@@ -805,33 +809,61 @@
                         delete settings.value.faturasPagas[faturaKey.value];
                     } else {
                         settings.value.faturasPagas[faturaKey.value] = true;
+                        // Celebração da liberação de limite!
+                        openModal('🎉 Uhuuu!', 'Você pagou sua fatura deste mês. Seu limite foi liberado com sucesso para você usar de novo!', null, true);
                     }
                 };
 
+                // Apenas as receitas RECEBIDAS para o Saldo Real
+                const realIncome = computed(() => incomes.value.filter(i => i.received).reduce((a, c) => a + c.amount, 0));
+                
+                // Exibição na Analytics ainda mostra a "Previsão total" de Entradas
+                const totalIncome = computed(() => incomes.value.reduce((a, c) => a + c.amount, 0));
+                
+                // Conta imediatamente gastos à vista (pix/dinheiro)
                 const dailyCash = computed(() => filteredDailyExpenses.value.filter(e => e.method !== 'credito').reduce((a, c) => a + c.amount, 0));
                 
-                const totalFixedCash = computed(() => fixedExpenses.value.filter(e => e.method !== 'credito').reduce((a, c) => a + c.amount, 0));
+                // Conta apenas fixos de dinheiro que foram PAGOS para diminuir do saldo real
+                const totalFixedCashPaid = computed(() => fixedExpenses.value.filter(e => e.method !== 'credito' && e.paid).reduce((a, c) => a + c.amount, 0));
                 
-                // CORREÇÃO AQUI: Esta variável soma todas as fixas (Cartão e Dinheiro) para exibir na Analytics
+                // Todos os gastos em dinheiro fixos (previsão) para orçamento
+                const totalFixedCash = computed(() => fixedExpenses.value.filter(e => e.method !== 'credito').reduce((a, c) => a + c.amount, 0));
+
+                // Soma todas as fixas (Cartão e Dinheiro) para exibir na Analytics (previsão do mês)
                 const totalFixedExpenses = computed(() => fixedExpenses.value.reduce((a, c) => a + c.amount, 0));
                 
-                const totalCreditUsedThisMonth = computed(() => {
-                    let used = filteredDailyExpenses.value.filter(e => e.method === 'credito').reduce((a, c) => a + (c.totalAmount || c.amount), 0);
-                    used += fixedExpenses.value.filter(e => e.method === 'credito').reduce((a, c) => a + c.amount, 0);
-                    return used;
+                // O Limite Disponível libera o valor da Fatura quando ela é marcada como paga
+                const availableCredit = computed(() => {
+                    let newPurchasesThisMonth = filteredDailyExpenses.value
+                        .filter(e => e.method === 'credito')
+                        .reduce((a, c) => a + (c.totalAmount || c.amount), 0);
+                        
+                    let newFixedCreditThisMonth = fixedExpenses.value
+                        .filter(e => e.method === 'credito')
+                        .reduce((a, c) => a + c.amount, 0);
+                        
+                    let totalUsed = newPurchasesThisMonth + newFixedCreditThisMonth;
+                    
+                    // Se a fatura desse mês AINDA NÃO FOI PAGA, ela consome o limite. Se pagou, libera!
+                    if (!isFaturaPaga.value) {
+                        totalUsed += faturaDesteMes.value;
+                    }
+                    
+                    return settings.value.creditLimit - totalUsed;
                 });
-                
-                const availableCredit = computed(() => settings.value.creditLimit - totalCreditUsedThisMonth.value);
 
-                const totalIncome = computed(() => incomes.value.reduce((a, c) => a + c.amount, 0));
                 const totalSaved = computed(() => savings.value.reduce((a, c) => a + c.amount, 0));
                 
+                // Saldo Real EXATO (Entradas Recebidas - Gastos Imediatos - Fixas Pagas - Fatura Paga - Cofrinho)
                 const balance = computed(() => {
-                    let b = totalIncome.value - totalFixedCash.value - dailyCash.value - totalSaved.value;
-                    b -= faturaDesteMes.value;
+                    let b = realIncome.value - totalFixedCashPaid.value - dailyCash.value - totalSaved.value;
+                    if (isFaturaPaga.value) {
+                        b -= faturaDesteMes.value;
+                    }
                     return b;
                 });
 
+                // Orçamento disponível (baseado na projeção total)
                 const availableForBudgets = computed(() => totalIncome.value - totalFixedCash.value - totalSaved.value - faturaDesteMes.value);
 
                 const formatCurrency = (val) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val || 0);
@@ -846,12 +878,18 @@
                 const getBudget = (id) => budgets.value.find(b => b.id === id) || budgets.value[0] || { name: 'Geral', icon: 'fa-solid fa-tag', color: 'bg-gray-200' };
                 
                 const toggleStatus = (item, field) => { item[field] = !item[field]; };
+                
                 const editCreditLimit = () => {
                     const novo = prompt('Qual o Limite Total do seu Cartão de Crédito?', settings.value.creditLimit);
                     if(novo && !isNaN(novo)) settings.value.creditLimit = parseFloat(novo);
                 };
 
-                const openModal = (title, message, action) => { modalData.value = { title, message, action }; showModal.value = true; };
+                // Atualizado para suportar modal de "informação" sem botão de cancelar
+                const openModal = (title, message, action = null, isInfo = false) => { 
+                    modalData.value = { title, message, action, isInfo }; 
+                    showModal.value = true; 
+                };
+                
                 const confirmModalAction = () => { if(modalData.value.action) modalData.value.action(); showModal.value = false; };
                 
                 const confirmReset = () => {
