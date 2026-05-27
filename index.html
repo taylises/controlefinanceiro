@@ -72,29 +72,6 @@
         .heat-1 { background-color: #fcd34d; }
         .heat-2 { background-color: #fb923c; }
         .heat-3 { background-color: #fb7185; }
-
-        /* Ajustes específicos para mobile */
-        @media (max-width: 767px) {
-            #app {
-                height: 100dvh;
-                border-radius: 0;
-            }
-
-            main {
-                padding-bottom: calc(6.5rem + env(safe-area-inset-bottom, 0px));
-            }
-
-            header {
-                padding-top: calc(4.5rem + env(safe-area-inset-top, 0px));
-                padding-bottom: 1rem;
-            }
-
-            header > .absolute.top-4.left-1\/2 {
-                top: calc(1rem + env(safe-area-inset-top, 0px));
-                width: calc(100% - 1.5rem);
-                max-width: 18rem;
-            }
-        }
     </style>
 
     <script type="importmap">
@@ -193,8 +170,8 @@
             <main class="flex-1 flex flex-col h-full relative overflow-hidden bg-[#fdf8f5]">
                 <div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#292524 2px, transparent 2px); background-size: 20px 20px;"></div>
                 
-                <header class="bg-retro-dark text-retro-cream px-5 pt-6 pb-5 shadow-md z-20 shrink-0 border-b-[3px] border-retro-dark relative">
-                    <div class="absolute top-4 left-1/2 transform -translate-x-1/2 bg-white text-retro-dark retro-border shadow-[2px_2px_0px_#fef3c7] rounded-full px-3 py-1 flex items-center gap-3 z-30">
+                <header class="bg-retro-dark text-retro-cream px-5 pt-4 md:pt-6 pb-5 shadow-md z-20 shrink-0 border-b-[3px] border-retro-dark relative">
+                    <div class="hidden md:flex absolute top-4 left-1/2 transform -translate-x-1/2 bg-white text-retro-dark retro-border shadow-[2px_2px_0px_#fef3c7] rounded-full px-3 py-1 items-center gap-3 z-30">
                         <button @click="changeMonth(-1)" class="active:scale-90"><i class="fa-solid fa-chevron-left text-[10px]"></i></button>
                         <span class="text-[10px] font-black uppercase tracking-widest">{{ currentMonthName }} {{ currentYear }}</span>
                         <button @click="changeMonth(1)" class="active:scale-90"><i class="fa-solid fa-chevron-right text-[10px]"></i></button>
@@ -250,7 +227,23 @@
                                 </div>
                             </div>
 
-                            <!-- CALENDÁRIO -->
+                            
+                            <!-- Navegação de meses mobile -->
+                            <div class="md:hidden flex justify-center mb-4">
+                                <div class="bg-white text-retro-dark retro-border shadow-[2px_2px_0px_#292524] rounded-full px-4 py-2 flex items-center gap-4">
+                                    <button @click="changeMonth(-1)" class="active:scale-90">
+                                        <i class="fa-solid fa-chevron-left text-xs"></i>
+                                    </button>
+                                    <span class="text-[11px] font-black uppercase tracking-widest">
+                                        {{ currentMonthName }} {{ currentYear }}
+                                    </span>
+                                    <button @click="changeMonth(1)" class="active:scale-90">
+                                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+<!-- CALENDÁRIO -->
                             <div class="bg-white rounded-2xl retro-border retro-shadow p-5 mb-6">
                                 <h4 class="font-black text-sm text-retro-dark uppercase tracking-widest mb-4 border-b-[3px] border-retro-dark pb-2">
                                     <i class="fa-regular fa-calendar-days mr-2 text-retro-orange"></i> Ritmo de Gastos Diários
